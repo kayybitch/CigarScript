@@ -1,15 +1,21 @@
 -- =======================================================
--- Cigar Hub - Violence District | UPGRADED EDITION
--- Ported & Merged: CigarHub
--- Features: Silent Aim, Silent Spear, Camera Veil, 
---           Auto Parry, Crosshair, PerfMonitor, Name Protect,
---           Skip End Screen, Ghost Gate, God Mode
+-- Cigar Hub - Violence District | FULL FIXED EDITION
+-- All features active, mobile-safe, per-feature pcall guards
 -- =======================================================
 
-local function LoadCigarUI()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/kayybitch/CigarScript/refs/heads/main/CigarUI"))()
+-- Guard: load CigarUI safely
+local CigarUI
+do
+    local ok, result = pcall(function()
+        return loadstring(game:HttpGet("https://raw.githubusercontent.com/kayybitch/CigarScript/refs/heads/main/CigarUI"))()
+    end)
+    if ok and result then
+        CigarUI = result
+    else
+        warn("[CigarLoad] CigarUI failed to load: " .. tostring(result))
+        return
+    end
 end
-local CigarUI = LoadCigarUI()
 
 -- =======================================================
 -- SERVICES
@@ -53,7 +59,7 @@ local validPartNames = {
 }
 
 -- =======================================================
--- ESP FOLDERS
+-- ESP FOLDER
 -- =======================================================
 local EspFolder = Workspace:FindFirstChild("CigarESP")
 if not EspFolder then
@@ -63,241 +69,85 @@ if not EspFolder then
 end
 
 -- =======================================================
--- CONFIG (Global Settings)
+-- CONFIG
 -- =======================================================
 local Config = {
-    -- Survivor
-    autoGenerator           = true,
-    autoGeneratorMode       = "Instant",
-    antiFallSlow            = false,
-    noSlowdown              = false,
-    speedBoost              = false,
-    boostPercent            = 50,
-    lockFovEnabled          = false,
-    customFovValue          = 70,
-
-    -- Silent Aim (Twist of Fate)
-    silentAimEnabled        = false,
-    silentAimFovRadius      = 150,
-    silentAimFovVisible     = false,
-    laserEspEnabled         = true,
-
-    -- Silent Spear
-    silentSpearEnabled      = false,
-    spearFovRadius          = 150,
-    spearFovCircleEnabled   = false,
-    spearIndicatorEnabled   = false,
-    spearSnaplineEnabled    = false,
-    spearSnaplineShowText   = true,
-
-    -- Camera Veil
-    cameraVeilEnabled       = false,
-    cameraVeilSnapLine      = false,
-    cameraVeilMaxDistance   = 175,
-    cameraVeilSmoothness    = 1,
-    cameraVeilSpearSpeed    = 220,
-
-    -- Hitbox
-    hitboxEnabled           = false,
-    survivorHitboxSize      = 100,
-    killerHitboxSize        = 100,
-
-    -- Hitbox ESP
-    hitboxEspEnabled        = false,
-    hitboxEspSurvivorColor  = Color3.fromRGB(0, 255, 120),
-    hitboxEspKillerColor    = Color3.fromRGB(255, 60, 60),
-    hitboxEspTransparency   = 0.5,
-    hitboxEspOutlineOnly    = false,
-
-    -- Player ESP
-    espSurvivors            = true,
-    survivorShowName        = false,
-    survivorShowOutline     = true,
-    survivorOutlineOnly     = true,
-    survivorColor           = Color3.fromRGB(60, 200, 255),
-
-    espKiller               = true,
-    killerShowName          = false,
-    killerShowOutline       = true,
-    killerOutlineOnly       = true,
-    killerColor             = Color3.fromRGB(255, 60, 60),
-
-    maxDistance             = 500,
-    fillTransparency        = 0.6,
-
-    -- Map ESP
-    espGeneratorEnabled     = false,
-    espGeneratorProgressGen = true,
-    espGeneratorColor       = Color3.fromRGB(200, 100, 0),
-    espPalletEnabled        = false,
-    espPalletColor          = Color3.fromRGB(53, 189, 166),
-    espHookEnabled          = false,
-    espHookColor            = Color3.fromRGB(252, 116, 116),
-    espGateEnabled          = false,
-    espGateColor            = Color3.fromRGB(255, 255, 255),
-
-    -- Warn
-    warnEnabled             = false,
-    warnDist1               = 60,
-    warnDist2               = 40,
-    warnDist3               = 20,
-
-    -- Lighting
-    fullbrightEnabled       = false,
-    removeVfxEnabled        = false,
-
-    -- Cursor
-    forceCursorEnabled      = false,
-    forceCursorKeybind      = "G",
-
-    -- Crosshair
-    crosshairEnabled        = false,
-    crosshairStyle          = "Plus",
-    crosshairSize           = 50,
-    crosshairOpacity        = 1,
-    crosshairColor          = Color3.fromRGB(0, 255, 80),
-    crosshairPosX           = 0.5,
-    crosshairPosY           = 0.5,
-
-    -- Skip End Screen
-    skipEndScreenEnabled    = false,
+    autoGenerator = true, autoGeneratorMode = "Instant",
+    antiFallSlow = false, noSlowdown = false, speedBoost = false, boostPercent = 50,
+    lockFovEnabled = false, customFovValue = 70,
+    silentAimEnabled = false, silentAimFovRadius = 150, silentAimFovVisible = false, laserEspEnabled = true,
+    silentSpearEnabled = false, spearFovRadius = 150, spearFovCircleEnabled = false, spearIndicatorEnabled = false, spearSnaplineEnabled = false, spearSnaplineShowText = true,
+    cameraVeilEnabled = false, cameraVeilSnapLine = false, cameraVeilMaxDistance = 175, cameraVeilSmoothness = 1, cameraVeilSpearSpeed = 220,
+    hitboxEnabled = false, survivorHitboxSize = 100, killerHitboxSize = 100,
+    hitboxEspEnabled = false, hitboxEspSurvivorColor = Color3.fromRGB(0, 255, 120), hitboxEspKillerColor = Color3.fromRGB(255, 60, 60), hitboxEspTransparency = 0.5, hitboxEspOutlineOnly = false,
+    espSurvivors = true, survivorShowName = false, survivorShowOutline = true, survivorOutlineOnly = true, survivorColor = Color3.fromRGB(60, 200, 255),
+    espKiller = true, killerShowName = false, killerShowOutline = true, killerOutlineOnly = true, killerColor = Color3.fromRGB(255, 60, 60),
+    maxDistance = 500, fillTransparency = 0.6,
+    espGeneratorEnabled = false, espGeneratorProgressGen = true, espGeneratorColor = Color3.fromRGB(200, 100, 0),
+    espPalletEnabled = false, espPalletColor = Color3.fromRGB(53, 189, 166),
+    espHookEnabled = false, espHookColor = Color3.fromRGB(252, 116, 116),
+    espGateEnabled = false, espGateColor = Color3.fromRGB(255, 255, 255),
+    warnEnabled = false, warnDist1 = 60, warnDist2 = 40, warnDist3 = 20,
+    fullbrightEnabled = false, removeVfxEnabled = false,
+    forceCursorEnabled = false, forceCursorKeybind = "G",
+    crosshairEnabled = false, crosshairStyle = "Plus", crosshairSize = 50, crosshairOpacity = 1,
+    crosshairColor = Color3.fromRGB(0, 255, 80), crosshairPosX = 0.5, crosshairPosY = 0.5,
+    skipEndScreenEnabled = false,
 }
 
 -- =======================================================
--- CHEAT STATE (Runtime)
+-- STATE
 -- =======================================================
 local CheatState = {
-    espObjects           = {},
-    outlineObjects       = {},
-    playerRoles          = {},
-    playerTeamConns      = {},
-    cachedMapObjects     = {Generators = {}, Pallets = {}, Hooks = {}, Gates = {}},
-    cachedPalletMeta     = {},
-    cachedHookMeshParts = {},
-    completedGenerators = {},
-    objEspInitialized    = false,
-
-    hitboxOriginalSizes  = {},
-    hitboxEspObjects     = {},
-
-    -- Camera Veil
-    CV_Enabled           = false,
-    CV_CurrentTarget     = nil,
-    CV_WasHolding        = false,
-    CV_HoldingPC         = false,
-    CV_HoldingMobile     = false,
-    CV_frameCount        = 0,
-    CV_spearModeFrame    = -99,
-    CV_cachedSpearMode   = false,
-    CV_SnapGui           = nil,
-    CV_SnapLine          = nil,
-    CV_SnapDot           = nil,
-    CV_lastSolvedHeadPos = nil,
-    CV_lastSolvedDir     = nil,
-    CV_lastSolvedPredicted = nil,
-    CV_lastSolvedTime    = nil,
-    CV_ballisticFrame    = -99,
-    CV_LastStableDir     = nil,
-    CV_acquireStartFrame = nil,
-    CV_LastSpearSpeed    = nil,
-    CV_LastGravityMult   = nil,
-    CV_Connections       = {},
-
-    -- Silent Aim
-    silentAimTarget      = nil,
-    silentAimLookVector  = nil,
-    FOVCircle            = nil,
-    triggerLaser         = false,
-    currentMuzzlePos     = nil,
-    currentTargetPos     = nil,
-
-    -- Silent Spear
-    silentSpearTargetTorso = nil,
-    silentSpearTargetVel   = Vector3.new(0,0,0),
-    silentSpearLookVector  = nil,
-    spearIsHolding         = false,
-    spearHoldStartTime     = nil,
-    lastSpearSpeed         = 142.5,
-    lastGravityMult        = 1,
-
-    -- SnapLine
-    SnapLineGui          = nil,
-    SnapLineFrame        = nil,
-    SnapLineDot          = nil,
-    SnapLineTextLabel    = nil,
-    spearFovCircleUI     = nil,
-    spearIndicatorGui    = nil,
-    spearStatusText      = nil,
-    spearInfoText        = nil,
-    spearAccentBar       = nil,
-
-    -- God
-    godEnabled           = false,
-    godLastHP            = nil,
-
-    -- Ghost Gate
-    ghostGateEnabled     = false,
-    ghostGateBackups     = {},
-
-    -- Auto Parry
-    autoParryEnabled     = false,
-    autoParryRadiusEsp   = false,
-    autoParryRadius      = 12,
-
-    -- Crosshair
-    crosshairGui         = nil,
-    crosshairState       = {LastStyle = nil, LastSize = nil, Frames = {}, Strokes = {}, DotFrames = {}},
-
-    -- Perf
-    perfGui              = nil,
-    perfEnabled          = false,
-
-    -- Cursor
-    cursorBackupIcon     = nil,
-    cursorBackupBehavior = nil,
-
-    -- Lighting
-    originalLighting     = {},
-    postEffectBackups    = {},
-
-    -- Name Protect
-    pnameEnabled         = false,
-    pnameFakeNames       = {},
-    pnameNameConns       = {},
-    pnameSlotConns       = {},
-    pnameWatchConn       = nil,
-    pnameAddedConn       = nil,
-    pnameFakeNamesList   = {"Player", "Guest", "Noob", "Pro", "Bot"},
-
-    -- Skip End
-    skipEndScreenConns   = {},
-
-    -- Warn
-    lastWarnLevel        = 0,
+    espObjects = {}, outlineObjects = {}, playerRoles = {}, playerTeamConns = {},
+    cachedMapObjects = {Generators = {}, Pallets = {}, Hooks = {}, Gates = {}},
+    cachedPalletMeta = {}, cachedHookMeshParts = {}, completedGenerators = {},
+    objEspInitialized = false,
+    hitboxOriginalSizes = {}, hitboxEspObjects = {},
+    CV_Enabled = false, CV_CurrentTarget = nil, CV_WasHolding = false, CV_HoldingPC = false, CV_HoldingMobile = false,
+    CV_frameCount = 0, CV_SnapGui = nil, CV_SnapLine = nil, CV_SnapDot = nil,
+    CV_LastStableDir = nil, CV_acquireStartFrame = nil, CV_LastSpearSpeed = nil, CV_LastGravityMult = nil,
+    CV_Connections = {},
+    silentAimTarget = nil, silentAimLookVector = nil, triggerLaser = false,
+    currentMuzzlePos = nil, currentTargetPos = nil,
+    silentSpearTargetTorso = nil, silentSpearLookVector = nil,
+    spearIsHolding = false, spearHoldStartTime = nil,
+    lastSpearSpeed = 142.5, lastGravityMult = 1,
+    godEnabled = false, godLastHP = nil,
+    ghostGateEnabled = false, ghostGateBackups = {},
+    autoParryEnabled = false, autoParryRadiusEsp = false, autoParryRadius = 12,
+    crosshairGui = nil, crosshairState = {LastStyle = nil, LastSize = nil, Frames = {}, Strokes = {}, DotFrames = {}},
+    perfGui = nil, perfEnabled = false,
+    cursorBackupIcon = nil, cursorBackupBehavior = nil,
+    originalFOV = nil,
+    pnameEnabled = false, pnameFakeNames = {}, pnameNameConns = {}, pnameWatchConn = nil, pnameAddedConn = nil,
+    pnameFakeNamesList = {"Player", "Guest", "Noob", "Pro", "Bot"},
+    skipEndScreenConns = {}, lastWarnLevel = 0,
+    modLoaded = {silentAim = false, silentSpear = false, cameraVeil = false},
 }
 
 local Hub = {}
 
 -- =======================================================
--- UTIL: ROLE / ATTR / PARTS
+-- UTIL
 -- =======================================================
 local function GetPlayerRole(player)
     return CheatState.playerRoles[player] or "survivor"
 end
 
 local function UpdatePlayerRole(player)
-    local success, teamName = pcall(function()
+    local ok, teamName = pcall(function()
         return player.Team and player.Team.Name:lower() or ""
     end)
-    CheatState.playerRoles[player] = (success and teamName:find("killer")) and "killer" or "survivor"
+    CheatState.playerRoles[player] = (ok and teamName:find("killer")) and "killer" or "survivor"
 end
 
 local function GetAttributeOrValue(obj, name)
     if typeof(obj) ~= "Instance" then return nil end
-    local attr = obj:GetAttribute(name)
-    if attr ~= nil then return attr end
-    local child = obj:FindFirstChild(name)
-    if child and child:IsA("ValueBase") then return child.Value end
+    local a = obj:GetAttribute(name)
+    if a ~= nil then return a end
+    local c = obj:FindFirstChild(name)
+    if c and c:IsA("ValueBase") then return c.Value end
     return nil
 end
 
@@ -313,260 +163,25 @@ end
 
 local function GetTargetAimPoint(character)
     if not character then return nil end
-    local upperTorso = character:FindFirstChild("UpperTorso")
-    if upperTorso and upperTorso:IsA("BasePart") then return upperTorso.Position end
-    local torso = character:FindFirstChild("Torso")
-    if torso and torso:IsA("BasePart") then return torso.Position end
-    local root = character:FindFirstChild("HumanoidRootPart")
-    if root then return root.Position + Vector3.new(0, 0.5, 0) end
+    local ut = character:FindFirstChild("UpperTorso")
+    if ut and ut:IsA("BasePart") then return ut.Position end
+    local t = character:FindFirstChild("Torso")
+    if t and t:IsA("BasePart") then return t.Position end
+    local r = character:FindFirstChild("HumanoidRootPart")
+    if r then return r.Position + Vector3.new(0, 0.5, 0) end
     return nil
 end
 
 local function IsWorldPointInScreenRadius(cam, worldPos, radius)
     if not cam or not worldPos then return false end
-    local screenPos, onScreen = cam:WorldToViewportPoint(worldPos)
-    if not onScreen then return false end
+    local sp, on = cam:WorldToViewportPoint(worldPos)
+    if not on then return false end
     local center = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2)
-    local sp = Vector2.new(screenPos.X, screenPos.Y)
-    return (sp - center).Magnitude <= radius
+    return (Vector2.new(sp.X, sp.Y) - center).Magnitude <= radius
 end
 
 -- =======================================================
--- MODULE: GOD MODE
--- =======================================================
-local function EnableGodMode()
-    CheatState.godEnabled = true
-    CheatState.godLastHP = nil
-    pcall(function()
-        local char = LocalPlayer.Character
-        if char then
-            local hum = char:FindFirstChildOfClass("Humanoid")
-            if hum then
-                hum:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
-                hum:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
-                hum:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
-            end
-        end
-    end)
-end
-
-local function DisableGodMode()
-    CheatState.godEnabled = false
-    CheatState.godLastHP = nil
-    pcall(function()
-        local char = LocalPlayer.Character
-        if not char then return end
-        local hum = char:FindFirstChildOfClass("Humanoid")
-        if not hum then return end
-        hum:SetStateEnabled(Enum.HumanoidStateType.Dead, true)
-        hum:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, true)
-        hum:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
-    end)
-end
-
-local function ProcessGodMode()
-    if not CheatState.godEnabled then return end
-    local char = LocalPlayer.Character
-    if not char or not char.Parent then return end
-    local hum = char:FindFirstChildOfClass("Humanoid")
-    if not hum then return end
-
-    local maxHP = hum.MaxHealth
-    local currentHP = hum.Health
-
-    if CheatState.godLastHP ~= nil and currentHP < CheatState.godLastHP and currentHP > 0 then
-        pcall(function() hum.Health = maxHP end)
-    end
-    CheatState.godLastHP = hum.Health
-
-    pcall(function()
-        local state = hum:GetState()
-        if state == Enum.HumanoidStateType.Dead then
-            hum.Health = maxHP
-            hum:ChangeState(Enum.HumanoidStateType.Running)
-            CheatState.godLastHP = maxHP
-        elseif state == Enum.HumanoidStateType.Ragdoll or state == Enum.HumanoidStateType.FallingDown then
-            hum:ChangeState(Enum.HumanoidStateType.GettingUp)
-        end
-    end)
-end
-
--- =======================================================
--- MODULE: AUTO PARRY
--- =======================================================
-local AutoParryState = {
-    Enabled = false, Cooldown = false, COOLDOWN_TIME = 1.0, KillerConns = {},
-    EspPart = nil, EspFolder = nil, HOLD_TIME = 0.06,
-    CachedBtn = nil, KillerBlacklist = {}, BLACKLIST_DURATION = 2.5
-}
-
-local function HasParryDagger()
-    local bp = LocalPlayer:FindFirstChild("Backpack")
-    if bp and bp:FindFirstChild(parryDaggerName) then return true end
-    local ch = LocalPlayer.Character
-    if ch and ch:FindFirstChild(parryDaggerName) then return true end
-    return false
-end
-
-local function IsParriableAnim(track)
-    local anim = track.Animation
-    if not anim then return false end
-    local name = anim.Name
-    if name then
-        local lower = name:lower():gsub("%s+", "")
-        for _, k in ipairs(killerAnims) do
-            if lower == k then return true end
-        end
-    end
-    return false
-end
-
-function Hub.IsPlayerInParryRange(killerChar)
-    local myChar = LocalPlayer.Character
-    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
-    local kRoot = killerChar:FindFirstChild("HumanoidRootPart")
-    if not myRoot or not kRoot then return false end
-    return (kRoot.Position - myRoot.Position).Magnitude <= CheatState.autoParryRadius
-end
-
-function Hub.IsTargetFacingMe(killerChar)
-    local myChar = LocalPlayer.Character
-    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
-    local kRoot = killerChar:FindFirstChild("HumanoidRootPart")
-    if not myRoot or not kRoot then return false end
-    local dir = (myRoot.Position - kRoot.Position).Unit
-    return kRoot.CFrame.LookVector:Dot(dir) > 0.46
-end
-
-function Hub.GetParryButton()
-    if AutoParryState.CachedBtn and AutoParryState.CachedBtn.Parent and AutoParryState.CachedBtn.Visible then
-        return AutoParryState.CachedBtn
-    end
-    local survivorMob = PlayerGui:FindFirstChild("Survivor-mob", true)
-    if not survivorMob then return nil end
-    local controls = survivorMob:FindFirstChild("Controls", true)
-    if not controls then return nil end
-    local btn = controls:FindFirstChild("Gui-mob")
-    if btn and btn:IsA("ImageButton") and btn.Visible then
-        AutoParryState.CachedBtn = btn
-        return btn
-    end
-    return nil
-end
-
-function Hub.TriggerParry()
-    local btn = Hub.GetParryButton()
-    if btn and type(firesignal) == "function" then
-        firesignal(btn.MouseButton1Down)
-        task.delay(AutoParryState.HOLD_TIME, function()
-            if btn and btn.Parent then
-                firesignal(btn.MouseButton1Up)
-                firesignal(btn.MouseButton1Click)
-            end
-        end)
-        return true
-    end
-    VirtualInputManager:SendMouseButtonEvent(0, 0, 1, true, game, 1)
-    task.delay(AutoParryState.HOLD_TIME, function()
-        VirtualInputManager:SendMouseButtonEvent(0, 0, 1, false, game, 1)
-    end)
-    return false
-end
-
-function Hub.ParryAttack(killerHum)
-    if AutoParryState.Cooldown then return end
-    AutoParryState.Cooldown = true
-    if killerHum then AutoParryState.KillerBlacklist[killerHum] = tick() end
-    Hub.TriggerParry()
-    task.delay(AutoParryState.COOLDOWN_TIME, function()
-        AutoParryState.Cooldown = false
-    end)
-end
-
-function Hub.TrackKillerAnimations(player, char)
-    if player == LocalPlayer then return end
-    UpdatePlayerRole(player)
-    if GetPlayerRole(player) ~= "killer" then return end
-    char = char or player.Character
-    if not char then return end
-    local hum = char:FindFirstChildOfClass("Humanoid")
-    if not hum or AutoParryState.KillerConns[hum] then return end
-
-    local conn = hum.AnimationPlayed:Connect(function(track)
-        if not CheatState.autoParryEnabled then return end
-        if not IsParriableAnim(track) then return end
-        if not Hub.IsPlayerInParryRange(char) then return end
-        if not Hub.IsTargetFacingMe(char) then return end
-        local lastBl = AutoParryState.KillerBlacklist[hum]
-        if lastBl and (tick() - lastBl) < AutoParryState.BLACKLIST_DURATION then return end
-        Hub.ParryAttack(hum)
-    end)
-    AutoParryState.KillerConns[hum] = conn
-end
-
-function Hub.EnableAutoParry()
-    CheatState.autoParryEnabled = true
-    AutoParryState.Enabled = true
-    for _, p in ipairs(Players:GetPlayers()) do Hub.TrackKillerAnimations(p) end
-end
-
-function Hub.DisableAutoParry()
-    CheatState.autoParryEnabled = false
-    AutoParryState.Enabled = false
-    for _, conn in pairs(AutoParryState.KillerConns) do pcall(function() conn:Disconnect() end) end
-    AutoParryState.KillerConns = {}
-end
-
-function Hub.ClearAutoParryEsp()
-    if AutoParryState.EspFolder then pcall(function() AutoParryState.EspFolder:Destroy() end) AutoParryState.EspFolder = nil end
-    for _, f in ipairs(Workspace:GetChildren()) do
-        if f.Name == "AutoParryRadiusESP" then pcall(function() f:Destroy() end) end
-    end
-    AutoParryState.EspPart = nil
-end
-
-function Hub.DrawAutoParryEsp()
-    Hub.ClearAutoParryEsp()
-    local folder = Instance.new("Folder")
-    folder.Name = "AutoParryRadiusESP"
-    folder.Parent = Workspace
-
-    local center = Instance.new("Part")
-    center.Name = "RadiusESP_Center"
-    center.Anchored = true
-    center.CanCollide = false
-    center.Transparency = 1
-    center.Size = Vector3.new(0.2, 0.2, 0.2)
-    center.Parent = folder
-
-    local pts = 36
-    local radius = CheatState.autoParryRadius
-    local atts = {}
-    for i = 1, pts do
-        local angle = (math.pi * 2 / pts) * i
-        local att = Instance.new("Attachment")
-        att.Position = Vector3.new(math.cos(angle) * radius, -2.5, math.sin(angle) * radius)
-        att.Parent = center
-        atts[i] = att
-    end
-    for i = 1, pts do
-        local nxt = (i % pts) + 1
-        local beam = Instance.new("Beam")
-        beam.Attachment0 = atts[i]
-        beam.Attachment1 = atts[nxt]
-        beam.Width0 = 0.15
-        beam.Width1 = 0.15
-        beam.Color = ColorSequence.new(Color3.fromRGB(255, 60, 60))
-        beam.LightEmission = 1
-        beam.FaceCamera = false
-        beam.Parent = center
-    end
-    AutoParryState.EspFolder = folder
-    AutoParryState.EspPart = center
-end
-
--- =======================================================
--- MODULE: MOVEMENT
+-- MOVEMENT (declare early, used by callbacks)
 -- =======================================================
 local MovementConns = {antiFall = nil, noSlow = nil}
 
@@ -581,9 +196,9 @@ local function EnableAntiFall(hum)
     if MovementConns.antiFall then MovementConns.antiFall:Disconnect() end
     if not hum then return end
     pcall(function() hum:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false) end)
-    MovementConns.antiFall = hum.StateChanged:Connect(function(_, newState)
+    MovementConns.antiFall = hum.StateChanged:Connect(function(_, s)
         if not Config.antiFallSlow then return end
-        if newState == Enum.HumanoidStateType.Landed or newState == Enum.HumanoidStateType.GettingUp or newState == Enum.HumanoidStateType.FallingDown then
+        if s == Enum.HumanoidStateType.Landed or s == Enum.HumanoidStateType.GettingUp or s == Enum.HumanoidStateType.FallingDown then
             pcall(function()
                 hum:ChangeState(Enum.HumanoidStateType.Running)
                 hum.WalkSpeed = GetModifiedSpeed()
@@ -612,7 +227,339 @@ local function DisableNoSlowdown()
 end
 
 -- =======================================================
--- MODULE: GHOST GATE + TELEPORT EXIT
+-- FOV (declare early)
+-- =======================================================
+local function SetFov(v)
+    local cam = Workspace.CurrentCamera
+    if not cam then return end
+    if CheatState.originalFOV == nil then CheatState.originalFOV = cam.FieldOfView end
+    cam.FieldOfView = v
+end
+
+local function ResetFov()
+    local cam = Workspace.CurrentCamera
+    if cam and CheatState.originalFOV then cam.FieldOfView = CheatState.originalFOV end
+    CheatState.originalFOV = nil
+end
+
+-- =======================================================
+-- LIGHTING (declare early)
+-- =======================================================
+local function EnableFullbright()
+    pcall(function()
+        Lighting.Ambient = Color3.fromRGB(178, 178, 178)
+        Lighting.OutdoorAmbient = Color3.fromRGB(178, 178, 178)
+        Lighting.GlobalShadows = false
+        Lighting.FogStart = 9e9
+        Lighting.FogEnd = 9e9
+        Lighting.Brightness = 3
+        Lighting.ClockTime = 12
+    end)
+end
+
+local function DisableFullbright()
+    pcall(function()
+        Lighting.Ambient = Color3.fromRGB(128, 128, 128)
+        Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+        Lighting.GlobalShadows = true
+        Lighting.FogStart = 0
+        Lighting.FogEnd = 1000
+        Lighting.Brightness = 1
+    end)
+end
+
+local function RemoveVisualEffects()
+    CheatState.postEffectBackups = CheatState.postEffectBackups or {}
+    for _, c in ipairs(Lighting:GetChildren()) do
+        if c:IsA("PostEffect") or c:IsA("Clouds") or c:IsA("Atmosphere") or c:IsA("Sky") then
+            CheatState.postEffectBackups[c] = {Enabled = c.Enabled, Parent = c.Parent}
+            pcall(function()
+                if c:IsA("Sky") then c.Parent = nil else c.Enabled = false end
+            end)
+        end
+    end
+end
+
+local function RestoreVisualEffects()
+    for c, m in pairs(CheatState.postEffectBackups or {}) do
+        pcall(function()
+            if c:IsA("Sky") then c.Parent = m.Parent else c.Enabled = m.Enabled end
+        end)
+    end
+    CheatState.postEffectBackups = {}
+end
+
+-- =======================================================
+-- CURSOR (declare early)
+-- =======================================================
+local function ForceCursorProps()
+    pcall(function() UserInputService.MouseIconEnabled = true end)
+    pcall(function() UserInputService.MouseBehavior = Enum.MouseBehavior.Default end)
+end
+
+local function SetForceCursor(enable)
+    Config.forceCursorEnabled = enable
+    if enable then ForceCursorProps() end
+end
+
+-- =======================================================
+-- SKIP END SCREEN (declare early)
+-- =======================================================
+local function EnableSkipEndScreen()
+    pcall(function()
+        local r = ReplicatedStorage:FindFirstChild("Remotes")
+        local g = r and r:FindFirstChild("Game")
+        if g and type(getconnections) == "function" then
+            for _, n in ipairs({"cutscene", "cutsceneEnd", "endscreencutscene"}) do
+                local ev = g:FindFirstChild(n)
+                if ev and ev:IsA("RemoteEvent") then
+                    pcall(function()
+                        for _, conn in ipairs(getconnections(ev.OnClientEvent)) do
+                            pcall(function() conn:Disable() end)
+                            pcall(function() conn:Disconnect() end)
+                        end
+                    end)
+                end
+            end
+        end
+    end)
+    table.insert(CheatState.skipEndScreenConns, RunService.Heartbeat:Connect(function()
+        if LocalPlayer:GetAttribute("isspectating") then LocalPlayer:SetAttribute("isspectating", false) end
+        if LocalPlayer:GetAttribute("killerend") then LocalPlayer:SetAttribute("killerend", false) end
+    end))
+end
+
+local function DisableSkipEndScreen()
+    for _, c in ipairs(CheatState.skipEndScreenConns) do pcall(function() c:Disconnect() end) end
+    CheatState.skipEndScreenConns = {}
+end
+
+-- =======================================================
+-- GOD MODE
+-- =======================================================
+local function EnableGodMode()
+    CheatState.godEnabled = true
+    CheatState.godLastHP = nil
+    pcall(function()
+        local ch = LocalPlayer.Character
+        if not ch then return end
+        local h = ch:FindFirstChildOfClass("Humanoid")
+        if h then
+            h:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+            h:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+            h:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+        end
+    end)
+end
+
+local function DisableGodMode()
+    CheatState.godEnabled = false
+    CheatState.godLastHP = nil
+    pcall(function()
+        local ch = LocalPlayer.Character
+        if not ch then return end
+        local h = ch:FindFirstChildOfClass("Humanoid")
+        if not h then return end
+        h:SetStateEnabled(Enum.HumanoidStateType.Dead, true)
+        h:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, true)
+        h:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
+    end)
+end
+
+local function ProcessGodMode()
+    if not CheatState.godEnabled then return end
+    local ch = LocalPlayer.Character
+    if not ch or not ch.Parent then return end
+    local h = ch:FindFirstChildOfClass("Humanoid")
+    if not h then return end
+    local maxHP = h.MaxHealth
+    local hp = h.Health
+    if CheatState.godLastHP ~= nil and hp < CheatState.godLastHP and hp > 0 then
+        pcall(function() h.Health = maxHP end)
+    end
+    CheatState.godLastHP = h.Health
+    pcall(function()
+        local s = h:GetState()
+        if s == Enum.HumanoidStateType.Dead then
+            h.Health = maxHP
+            h:ChangeState(Enum.HumanoidStateType.Running)
+            CheatState.godLastHP = maxHP
+        elseif s == Enum.HumanoidStateType.Ragdoll or s == Enum.HumanoidStateType.FallingDown then
+            h:ChangeState(Enum.HumanoidStateType.GettingUp)
+        end
+    end)
+end
+
+-- =======================================================
+-- AUTO PARRY
+-- =======================================================
+local AutoParryState = {
+    Enabled = false, Cooldown = false, COOLDOWN_TIME = 1.0, KillerConns = {},
+    EspPart = nil, EspFolder = nil, HOLD_TIME = 0.06,
+    CachedBtn = nil, KillerBlacklist = {}, BLACKLIST_DURATION = 2.5
+}
+
+local function IsParriableAnim(track)
+    local anim = track.Animation
+    if not anim then return false end
+    local n = anim.Name
+    if n then
+        local lower = n:lower():gsub("%s+", "")
+        for _, k in ipairs(killerAnims) do
+            if lower == k then return true end
+        end
+    end
+    return false
+end
+
+function Hub.IsPlayerInParryRange(char)
+    local my = LocalPlayer.Character
+    local myRoot = my and my:FindFirstChild("HumanoidRootPart")
+    local kRoot = char:FindFirstChild("HumanoidRootPart")
+    if not myRoot or not kRoot then return false end
+    return (kRoot.Position - myRoot.Position).Magnitude <= CheatState.autoParryRadius
+end
+
+function Hub.IsTargetFacingMe(char)
+    local my = LocalPlayer.Character
+    local myRoot = my and my:FindFirstChild("HumanoidRootPart")
+    local kRoot = char:FindFirstChild("HumanoidRootPart")
+    if not myRoot or not kRoot then return false end
+    return kRoot.CFrame.LookVector:Dot((myRoot.Position - kRoot.Position).Unit) > 0.46
+end
+
+function Hub.GetParryButton()
+    if AutoParryState.CachedBtn and AutoParryState.CachedBtn.Parent and AutoParryState.CachedBtn.Visible then
+        return AutoParryState.CachedBtn
+    end
+    local mob = PlayerGui:FindFirstChild("Survivor-mob", true)
+    if not mob then return nil end
+    local ctrl = mob:FindFirstChild("Controls", true)
+    if not ctrl then return nil end
+    local btn = ctrl:FindFirstChild("Gui-mob")
+    if btn and btn:IsA("ImageButton") and btn.Visible then
+        AutoParryState.CachedBtn = btn
+        return btn
+    end
+    return nil
+end
+
+function Hub.TriggerParry()
+    local btn = Hub.GetParryButton()
+    if btn and type(firesignal) == "function" then
+        pcall(function()
+            firesignal(btn.MouseButton1Down)
+            task.delay(AutoParryState.HOLD_TIME, function()
+                if btn and btn.Parent then
+                    firesignal(btn.MouseButton1Up)
+                    firesignal(btn.MouseButton1Click)
+                end
+            end)
+        end)
+        return true
+    end
+    pcall(function()
+        VirtualInputManager:SendMouseButtonEvent(0, 0, 1, true, game, 1)
+        task.delay(AutoParryState.HOLD_TIME, function()
+            VirtualInputManager:SendMouseButtonEvent(0, 0, 1, false, game, 1)
+        end)
+    end)
+    return false
+end
+
+function Hub.ParryAttack(hum)
+    if AutoParryState.Cooldown then return end
+    AutoParryState.Cooldown = true
+    if hum then AutoParryState.KillerBlacklist[hum] = tick() end
+    Hub.TriggerParry()
+    task.delay(AutoParryState.COOLDOWN_TIME, function() AutoParryState.Cooldown = false end)
+end
+
+function Hub.TrackKillerAnimations(player, char)
+    if player == LocalPlayer then return end
+    UpdatePlayerRole(player)
+    if GetPlayerRole(player) ~= "killer" then return end
+    char = char or player.Character
+    if not char then return end
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    if not hum or AutoParryState.KillerConns[hum] then return end
+    local conn = hum.AnimationPlayed:Connect(function(track)
+        pcall(function()
+            if not CheatState.autoParryEnabled then return end
+            if not IsParriableAnim(track) then return end
+            if not Hub.IsPlayerInParryRange(char) then return end
+            if not Hub.IsTargetFacingMe(char) then return end
+            local lastBl = AutoParryState.KillerBlacklist[hum]
+            if lastBl and (tick() - lastBl) < AutoParryState.BLACKLIST_DURATION then return end
+            Hub.ParryAttack(hum)
+        end)
+    end)
+    AutoParryState.KillerConns[hum] = conn
+end
+
+function Hub.EnableAutoParry()
+    CheatState.autoParryEnabled = true
+    AutoParryState.Enabled = true
+    for _, p in ipairs(Players:GetPlayers()) do
+        pcall(function() Hub.TrackKillerAnimations(p) end)
+    end
+end
+
+function Hub.DisableAutoParry()
+    CheatState.autoParryEnabled = false
+    AutoParryState.Enabled = false
+    for _, c in pairs(AutoParryState.KillerConns) do pcall(function() c:Disconnect() end) end
+    AutoParryState.KillerConns = {}
+end
+
+function Hub.ClearAutoParryEsp()
+    if AutoParryState.EspFolder then pcall(function() AutoParryState.EspFolder:Destroy() end) AutoParryState.EspFolder = nil end
+    for _, f in ipairs(Workspace:GetChildren()) do
+        if f.Name == "AutoParryRadiusESP" then pcall(function() f:Destroy() end) end
+    end
+    AutoParryState.EspPart = nil
+end
+
+function Hub.DrawAutoParryEsp()
+    Hub.ClearAutoParryEsp()
+    local folder = Instance.new("Folder")
+    folder.Name = "AutoParryRadiusESP"
+    folder.Parent = Workspace
+    local center = Instance.new("Part")
+    center.Name = "RadiusESP_Center"
+    center.Anchored = true
+    center.CanCollide = false
+    center.Transparency = 1
+    center.Size = Vector3.new(0.2, 0.2, 0.2)
+    center.Parent = folder
+    local pts = 36
+    local radius = CheatState.autoParryRadius
+    local atts = {}
+    for i = 1, pts do
+        local angle = (math.pi * 2 / pts) * i
+        local a = Instance.new("Attachment")
+        a.Position = Vector3.new(math.cos(angle) * radius, -2.5, math.sin(angle) * radius)
+        a.Parent = center
+        atts[i] = a
+    end
+    for i = 1, pts do
+        local nxt = (i % pts) + 1
+        local b = Instance.new("Beam")
+        b.Attachment0 = atts[i]
+        b.Attachment1 = atts[nxt]
+        b.Width0 = 0.15
+        b.Width1 = 0.15
+        b.Color = ColorSequence.new(Color3.fromRGB(255, 60, 60))
+        b.LightEmission = 1
+        b.FaceCamera = false
+        b.Parent = center
+    end
+    AutoParryState.EspFolder = folder
+    AutoParryState.EspPart = center
+end
+
+-- =======================================================
+-- GHOST GATE + TELEPORT
 -- =======================================================
 function Hub.ApplyGhostGateToObj(gate, enable)
     if not gate or not gate.Parent then return end
@@ -636,8 +583,8 @@ function Hub.ApplyGhostGateToObj(gate, enable)
 end
 
 function Hub.ApplyGhostGate()
-    for _, gate in ipairs(CheatState.cachedMapObjects.Gates) do
-        Hub.ApplyGhostGateToObj(gate, CheatState.ghostGateEnabled)
+    for _, g in ipairs(CheatState.cachedMapObjects.Gates) do
+        Hub.ApplyGhostGateToObj(g, CheatState.ghostGateEnabled)
     end
 end
 
@@ -645,42 +592,37 @@ function Hub.TeleportToExitGate()
     local char = LocalPlayer.Character
     local root = char and char:FindFirstChild("HumanoidRootPart")
     if not root then
-        CigarUI:MakeNotify({Title = "Teleport", Description = "Error", Content = "Character not found!", Color = Color3.fromRGB(255, 80, 80), Delay = 2})
+        pcall(function() CigarUI:MakeNotify({Title = "Teleport", Description = "Error", Content = "Character not found!", Color = Color3.fromRGB(255, 80, 80), Delay = 2}) end)
         return
     end
-    local nearest, nearestDist = nil, math.huge
-    for _, gate in ipairs(CheatState.cachedMapObjects.Gates) do
-        if gate and gate.Parent then
-            local part = (gate:IsA("Model") and gate.PrimaryPart) or (gate:IsA("BasePart") and gate) or gate:FindFirstChildWhichIsA("BasePart", true)
+    local nearest, nearestD = nil, math.huge
+    for _, g in ipairs(CheatState.cachedMapObjects.Gates) do
+        if g and g.Parent then
+            local part = (g:IsA("Model") and g.PrimaryPart) or (g:IsA("BasePart") and g) or g:FindFirstChildWhichIsA("BasePart", true)
             if part then
                 local d = (part.Position - root.Position).Magnitude
-                if d < nearestDist then nearestDist = d nearest = part end
+                if d < nearestD then nearestD = d nearest = part end
             end
         end
     end
     if not nearest then
-        CigarUI:MakeNotify({Title = "Teleport", Description = "Error", Content = "No gates found!", Color = Color3.fromRGB(255, 80, 80), Delay = 2})
+        pcall(function() CigarUI:MakeNotify({Title = "Teleport", Description = "Error", Content = "No gates found!", Color = Color3.fromRGB(255, 80, 80), Delay = 2}) end)
         return
     end
     local gatePos = nearest.Position
     local delta = gatePos - root.Position
     local horiz = Vector3.new(delta.X, 0, delta.Z)
     local dir = (horiz.Magnitude > 0.1) and horiz.Unit or nearest.CFrame.LookVector
-
     local params = RaycastParams.new()
     params.FilterType = Enum.RaycastFilterType.Exclude
     params.FilterDescendantsInstances = {char, nearest.Parent}
-
     local targetPos = nil
     for _, off in ipairs({15, 20, 25, 10}) do
         local start = gatePos + (dir * off) + Vector3.new(0, 10, 0)
         local hit = Workspace:Raycast(start, Vector3.new(0, -30, 0), params)
         if hit then
             local ceil = Workspace:Raycast(hit.Position + Vector3.new(0, 5, 0), Vector3.new(0, 5, 0), params)
-            if not ceil then
-                targetPos = hit.Position + Vector3.new(0, 3, 0)
-                break
-            end
+            if not ceil then targetPos = hit.Position + Vector3.new(0, 3, 0) break end
         end
     end
     if targetPos then
@@ -691,122 +633,16 @@ function Hub.TeleportToExitGate()
 end
 
 -- =======================================================
--- MODULE: FOV / LIGHTING / CURSOR
+-- ESP HIGHLIGHT
 -- =======================================================
-local function SetFov(v)
-    local cam = Workspace.CurrentCamera
-    if not cam then return end
-    if CheatState.originalFOV == nil then CheatState.originalFOV = cam.FieldOfView end
-    cam.FieldOfView = v
-end
-local function ResetFov()
-    local cam = Workspace.CurrentCamera
-    if cam and CheatState.originalFOV then cam.FieldOfView = CheatState.originalFOV end
-    CheatState.originalFOV = nil
-end
-
-local function EnableFullbright()
-    Lighting.Ambient = Color3.fromRGB(178, 178, 178)
-    Lighting.OutdoorAmbient = Color3.fromRGB(178, 178, 178)
-    Lighting.GlobalShadows = false
-    Lighting.FogStart = 9e9
-    Lighting.FogEnd = 9e9
-    Lighting.Brightness = 3
-    Lighting.ClockTime = 12
-end
-
-local function DisableFullbright()
-    Lighting.Ambient = Color3.fromRGB(128, 128, 128)
-    Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
-    Lighting.GlobalShadows = true
-    Lighting.FogStart = 0
-    Lighting.FogEnd = 1000
-    Lighting.Brightness = 1
-end
-
-local function RemoveVisualEffects()
-    CheatState.postEffectBackups = {}
-    for _, child in ipairs(Lighting:GetChildren()) do
-        if child:IsA("PostEffect") or child:IsA("Clouds") or child:IsA("Atmosphere") or child:IsA("Sky") then
-            CheatState.postEffectBackups[child] = {Enabled = child.Enabled, Parent = child.Parent}
-            pcall(function()
-                if child:IsA("Sky") then child.Parent = nil else child.Enabled = false end
-            end)
-        end
-    end
-end
-
-local function RestoreVisualEffects()
-    for child, meta in pairs(CheatState.postEffectBackups) do
-        if child then
-            pcall(function()
-                if child:IsA("Sky") then child.Parent = meta.Parent else child.Enabled = meta.Enabled end
-            end)
-        end
-    end
-    CheatState.postEffectBackups = {}
-end
-
-local function ForceCursorProps()
-    pcall(function() UserInputService.MouseIconEnabled = true end)
-    pcall(function() UserInputService.MouseBehavior = Enum.MouseBehavior.Default end)
-end
-
-local function SetForceCursor(enable)
-    Config.forceCursorEnabled = enable
-    if enable then ForceCursorProps() end
-end
-
-UserInputService.InputBegan:Connect(function(input, gpe)
-    if gpe or UserInputService:GetFocusedTextBox() then return end
-    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode.Name == Config.forceCursorKeybind then
-        SetForceCursor(not Config.forceCursorEnabled)
-        CigarUI:MakeNotify({Title = "Cursor", Description = "Keybind", Content = "Force Cursor: " .. (Config.forceCursorEnabled and "ON" or "OFF"), Color = Color3.fromRGB(80, 200, 255), Delay = 1.5})
-    end
-end)
-
--- =======================================================
--- MODULE: SKIP END SCREEN
--- =======================================================
-local function EnableSkipEndScreen()
-    pcall(function()
-        local remotes = ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("Game")
-        if remotes then
-            for _, name in ipairs({"cutscene", "cutsceneEnd", "endscreencutscene"}) do
-                local r = remotes:FindFirstChild(name)
-                if r and r:IsA("RemoteEvent") and type(getconnections) == "function" then
-                    pcall(function()
-                        for _, conn in ipairs(getconnections(r.OnClientEvent)) do
-                            pcall(function() conn:Disable() end)
-                            pcall(function() conn:Disconnect() end)
-                        end
-                    end)
-                end
-            end
-        end
-    end)
-    table.insert(CheatState.skipEndScreenConns, RunService.Heartbeat:Connect(function()
-        if LocalPlayer:GetAttribute("isspectating") then LocalPlayer:SetAttribute("isspectating", false) end
-        if LocalPlayer:GetAttribute("killerend") then LocalPlayer:SetAttribute("killerend", false) end
-    end))
-end
-
-local function DisableSkipEndScreen()
-    for _, conn in ipairs(CheatState.skipEndScreenConns) do pcall(function() conn:Disconnect() end) end
-    CheatState.skipEndScreenConns = {}
-end
-
--- =======================================================
--- MODULE: ESP (PLAYERS + MAP)
--- =======================================================
-local function CreateHighlight(obj, color, fillTrans)
+local function CreateHighlight(obj, color, fill)
     if not obj or not obj.Parent then return end
     local hl = obj:FindFirstChild("CigarHL")
     if not hl then
         hl = Instance.new("Highlight")
         hl.Name = "CigarHL"
         hl.Adornee = obj
-        hl.FillTransparency = fillTrans or 0.6
+        hl.FillTransparency = fill or 0.6
         hl.OutlineTransparency = 0
         hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
         hl.FillColor = color
@@ -814,8 +650,9 @@ local function CreateHighlight(obj, color, fillTrans)
         hl.Parent = obj
         return
     end
-    if hl.FillColor ~= color then hl.FillColor = color hl.OutlineColor = color end
-    hl.FillTransparency = fillTrans or 0.6
+    hl.FillColor = color
+    hl.OutlineColor = color
+    hl.FillTransparency = fill or 0.6
     hl.Enabled = true
 end
 
@@ -825,76 +662,66 @@ local function RemoveHighlight(obj)
     if hl then pcall(function() hl:Destroy() end) end
 end
 
-local function UpdateOutline(player, character)
+local function UpdateOutline(player, char)
     local hl = CheatState.outlineObjects[player]
     if not hl then return end
-    local role = GetPlayerRole(player)
-    local isKiller = (role == "killer")
-    local color = isKiller and Config.killerColor or Config.survivorColor
-    local showOutline = isKiller and Config.killerShowOutline or Config.survivorShowOutline
-    local outlineOnly = isKiller and Config.killerOutlineOnly or Config.survivorOutlineOnly
-    local enabled = isKiller and Config.espKiller or Config.espSurvivors
-
-    hl.Adornee = character
+    local isK = GetPlayerRole(player) == "killer"
+    local color = isK and Config.killerColor or Config.survivorColor
+    local show = isK and Config.killerShowOutline or Config.survivorShowOutline
+    local only = isK and Config.killerOutlineOnly or Config.survivorOutlineOnly
+    local en = isK and Config.espKiller or Config.espSurvivors
+    hl.Adornee = char
     hl.FillColor = color
     hl.OutlineColor = color
-    hl.FillTransparency = outlineOnly and 1 or Config.fillTransparency
+    hl.FillTransparency = only and 1 or Config.fillTransparency
     hl.OutlineTransparency = 0
     hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-    hl.Enabled = enabled and showOutline
+    hl.Enabled = en and show
 end
 
-local function AttachEspAdornee(player, character)
+local function AttachEspAdornee(player, char)
     local esp = CheatState.espObjects[player]
     if not esp or not esp.billboard then return end
-    local root = character:FindFirstChild("HumanoidRootPart") or character:WaitForChild("HumanoidRootPart", 5)
+    local root = char:FindFirstChild("HumanoidRootPart") or char:WaitForChild("HumanoidRootPart", 5)
     if root then esp.billboard.Adornee = root end
-    local role = GetPlayerRole(player)
-    local isKiller = (role == "killer")
-    local enabled = isKiller and Config.espKiller or Config.espSurvivors
-    local showName = isKiller and Config.killerShowName or Config.survivorShowName
-
-    esp.nameLabel.Visible = enabled and showName
+    local isK = GetPlayerRole(player) == "killer"
+    local en = isK and Config.espKiller or Config.espSurvivors
+    local show = isK and Config.killerShowName or Config.survivorShowName
+    esp.nameLabel.Visible = en and show
     esp.nameLabel.Text = CheatState.pnameEnabled and (CheatState.pnameFakeNames[player] or player.Name) or player.Name
 end
 
 local function SetupPlayerEsp(player)
     if player == LocalPlayer then return end
     UpdatePlayerRole(player)
-    local role = GetPlayerRole(player)
-    local isKiller = (role == "killer")
-
-    local billboard = Instance.new("BillboardGui")
-    billboard.Name = "CigarESP_BB_" .. player.Name
-    billboard.AlwaysOnTop = true
-    billboard.Size = UDim2.new(0, 150, 0, 18)
-    billboard.StudsOffset = Vector3.new(0, 3.5, 0)
-    billboard.MaxDistance = Config.maxDistance
-    billboard.Parent = EspFolder
-
-    local nameLabel = Instance.new("TextLabel")
-    nameLabel.Name = "NameLabel"
-    nameLabel.Size = UDim2.new(1, 0, 0, 18)
-    nameLabel.Position = UDim2.new(0, 0, 0, -10)
-    nameLabel.BackgroundTransparency = 1
-    nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    nameLabel.TextStrokeTransparency = 0
-    nameLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
-    nameLabel.TextSize = 12
-    nameLabel.Font = Enum.Font.GothamBold
-    nameLabel.Text = player.Name
-    nameLabel.Visible = isKiller and Config.killerShowName or Config.survivorShowName
-    nameLabel.Parent = billboard
-
-    CheatState.espObjects[player] = {billboard = billboard, nameLabel = nameLabel}
+    local isK = GetPlayerRole(player) == "killer"
+    local bb = Instance.new("BillboardGui")
+    bb.Name = "CigarESP_BB_" .. player.Name
+    bb.AlwaysOnTop = true
+    bb.Size = UDim2.new(0, 150, 0, 18)
+    bb.StudsOffset = Vector3.new(0, 3.5, 0)
+    bb.MaxDistance = Config.maxDistance
+    bb.Parent = EspFolder
+    local lbl = Instance.new("TextLabel")
+    lbl.Name = "NameLabel"
+    lbl.Size = UDim2.new(1, 0, 0, 18)
+    lbl.Position = UDim2.new(0, 0, 0, -10)
+    lbl.BackgroundTransparency = 1
+    lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+    lbl.TextStrokeTransparency = 0
+    lbl.TextStrokeColor3 = Color3.new(0, 0, 0)
+    lbl.TextSize = 12
+    lbl.Font = Enum.Font.GothamBold
+    lbl.Text = player.Name
+    lbl.Visible = isK and Config.killerShowName or Config.survivorShowName
+    lbl.Parent = bb
+    CheatState.espObjects[player] = {billboard = bb, nameLabel = lbl}
     if player.Character then AttachEspAdornee(player, player.Character) end
-
     if not CheatState.playerTeamConns[player] then
         CheatState.playerTeamConns[player] = player:GetPropertyChangedSignal("Team"):Connect(function()
             UpdatePlayerRole(player)
             local r = GetPlayerRole(player)
-            local ik = (r == "killer")
-            nameLabel.Visible = ik and Config.killerShowName or Config.survivorShowName
+            lbl.Visible = (r == "killer") and Config.killerShowName or Config.survivorShowName
         end)
     end
 end
@@ -916,58 +743,55 @@ local function RemovePlayerEsp(player)
 end
 
 local function UpdatePlayerEsp()
-    for player, esp in pairs(CheatState.espObjects) do
+    for p, esp in pairs(CheatState.espObjects) do
         if esp and esp.billboard and esp.billboard.Parent then
-            local role = GetPlayerRole(player)
-            local isKiller = (role == "killer")
-            local enabled = isKiller and Config.espKiller or Config.espSurvivors
-            esp.nameLabel.Visible = enabled and (isKiller and Config.killerShowName or Config.survivorShowName)
+            local isK = GetPlayerRole(p) == "killer"
+            local en = isK and Config.espKiller or Config.espSurvivors
+            esp.nameLabel.Visible = en and (isK and Config.killerShowName or Config.survivorShowName)
             esp.billboard.MaxDistance = Config.maxDistance
         end
     end
-    for player, hl in pairs(CheatState.outlineObjects) do
-        if hl and hl.Parent and player and player.Parent and player.Character then UpdateOutline(player, player.Character) end
+    for p, hl in pairs(CheatState.outlineObjects) do
+        if hl and hl.Parent and p and p.Parent and p.Character then UpdateOutline(p, p.Character) end
     end
 end
 
 -- =======================================================
--- MODULE: HITBOX + HITBOX ESP
+-- HITBOX
 -- =======================================================
-local function SetPlayerHitbox(player, character)
+local function SetPlayerHitbox(player, char)
     if not Config.hitboxEnabled then return end
-    local parts = GetCharacterParts(character)
-    local role = GetPlayerRole(player)
-    local mult = ((role == "killer") and Config.killerHitboxSize or Config.survivorHitboxSize) / 100
-    for _, part in ipairs(parts) do
-        if not CheatState.hitboxOriginalSizes[part] then CheatState.hitboxOriginalSizes[part] = part.Size end
-        pcall(function() part.Size = CheatState.hitboxOriginalSizes[part] * mult end)
+    local parts = GetCharacterParts(char)
+    local mult = ((GetPlayerRole(player) == "killer") and Config.killerHitboxSize or Config.survivorHitboxSize) / 100
+    for _, p in ipairs(parts) do
+        if not CheatState.hitboxOriginalSizes[p] then CheatState.hitboxOriginalSizes[p] = p.Size end
+        pcall(function() p.Size = CheatState.hitboxOriginalSizes[p] * mult end)
     end
 end
 
-local function ResetPlayerHitbox(player, character)
-    if not character then return end
-    for _, part in ipairs(character:GetDescendants()) do
-        if part:IsA("BasePart") then
-            local orig = CheatState.hitboxOriginalSizes[part]
-            if orig then pcall(function() part.Size = orig end) CheatState.hitboxOriginalSizes[part] = nil end
+local function ResetPlayerHitbox(player, char)
+    if not char then return end
+    for _, p in ipairs(char:GetDescendants()) do
+        if p:IsA("BasePart") then
+            local o = CheatState.hitboxOriginalSizes[p]
+            if o then pcall(function() p.Size = o end) CheatState.hitboxOriginalSizes[p] = nil end
         end
     end
 end
 
 local function SetAllHitboxes()
-    for _, player in ipairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer and player.Character then
-            if Config.hitboxEnabled then SetPlayerHitbox(player, player.Character) else ResetPlayerHitbox(player, player.Character) end
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character then
+            if Config.hitboxEnabled then SetPlayerHitbox(p, p.Character) else ResetPlayerHitbox(p, p.Character) end
         end
     end
 end
 
-local function SetupHitboxEsp(player, character)
+local function SetupHitboxEsp(player, char)
     if player == LocalPlayer then return end
-    local root = character and character:FindFirstChild("HumanoidRootPart")
+    local root = char and char:FindFirstChild("HumanoidRootPart")
     if not root then return end
-    local role = GetPlayerRole(player)
-    local color = (role == "killer") and Config.hitboxEspKillerColor or Config.hitboxEspSurvivorColor
+    local color = (GetPlayerRole(player) == "killer") and Config.hitboxEspKillerColor or Config.hitboxEspSurvivorColor
     local box = CheatState.hitboxEspObjects[player]
     if not box or not box.Parent then
         box = Instance.new("SelectionBox")
@@ -983,99 +807,93 @@ local function SetupHitboxEsp(player, character)
 end
 
 local function RemoveHitboxEsp(player)
-    local box = CheatState.hitboxEspObjects[player]
-    if box then pcall(function() box:Destroy() end) CheatState.hitboxEspObjects[player] = nil end
+    local b = CheatState.hitboxEspObjects[player]
+    if b then pcall(function() b:Destroy() end) CheatState.hitboxEspObjects[player] = nil end
 end
 
 -- =======================================================
--- MODULE: MAP ESP
+-- MAP ESP
 -- =======================================================
 local function UpdateGeneratorEsp(gen)
     if not gen or not gen.Parent then return true end
     if CheatState.completedGenerators[gen] then return true end
     local progress = GetAttributeOrValue(gen, "RepairProgress") or GetAttributeOrValue(gen, "Progress") or 0
-    local isCompleted = (progress >= 100)
-        or (GetAttributeOrValue(gen, "Completed") == true)
-        or (GetAttributeOrValue(gen, "IsCompleted") == true)
-        or (GetAttributeOrValue(gen, "Done") == true)
-    local billboard = gen:FindFirstChild("CigarGenProgress")
-    if isCompleted or not Config.espGeneratorEnabled then
-        if billboard then billboard:Destroy() end
+    local done = (progress >= 100) or (GetAttributeOrValue(gen, "Completed") == true) or (GetAttributeOrValue(gen, "IsCompleted") == true) or (GetAttributeOrValue(gen, "Done") == true)
+    local bb = gen:FindFirstChild("CigarGenProgress")
+    if done or not Config.espGeneratorEnabled then
+        if bb then bb:Destroy() end
         RemoveHighlight(gen)
         gen:SetAttribute("CigarGenLastPct", nil)
-        if isCompleted then CheatState.completedGenerators[gen] = true end
-        return isCompleted
+        if done then CheatState.completedGenerators[gen] = true end
+        return done
     end
     CreateHighlight(gen, Config.espGeneratorColor, 0.6)
     if Config.espGeneratorProgressGen then
         local pct = math.floor(progress + 0.5)
-        local lastPct = gen:GetAttribute("CigarGenLastPct")
-        if lastPct == pct and billboard then return false end
+        if gen:GetAttribute("CigarGenLastPct") == pct and bb then return false end
         gen:SetAttribute("CigarGenLastPct", pct)
-        local clamped = math.clamp(progress, 0, 100)
-        local color = (clamped < 50)
-            and Config.espGeneratorColor:Lerp(Color3.fromRGB(255, 200, 0), clamped / 50)
-            or Color3.fromRGB(255, 200, 0):Lerp(Color3.fromRGB(100, 255, 80), (clamped - 50) / 50)
+        local c = math.clamp(progress, 0, 100)
+        local color = (c < 50) and Config.espGeneratorColor:Lerp(Color3.fromRGB(255, 200, 0), c/50) or Color3.fromRGB(255, 200, 0):Lerp(Color3.fromRGB(100, 255, 80), (c-50)/50)
         local txt = string.format("%d%%", pct)
-        local mainPart = gen:FindFirstChild("defaultMaterial", true) or (gen:IsA("Model") and gen.PrimaryPart) or gen:FindFirstChildWhichIsA("BasePart", true)
-        if not mainPart then return false end
-        if not billboard then
-            billboard = Instance.new("BillboardGui")
-            billboard.Name = "CigarGenProgress"
-            billboard.Adornee = mainPart
-            billboard.AlwaysOnTop = true
-            billboard.LightInfluence = 0
-            billboard.ResetOnSpawn = false
-            billboard.MaxDistance = 260
-            billboard.Size = UDim2.new(0, 160, 0, 36)
-            billboard.StudsOffset = Vector3.new(0, 1.95, 0)
-            billboard.Parent = gen
-            local label = Instance.new("TextLabel")
-            label.Name = "Label"
-            label.BackgroundTransparency = 1
-            label.Size = UDim2.fromScale(1, 1)
-            label.Font = Enum.Font.GothamBold
-            label.TextSize = 16
-            label.Text = txt
-            label.TextColor3 = color
-            label.TextStrokeTransparency = 0
-            label.Parent = billboard
-            local stroke = Instance.new("UIStroke")
-            stroke.Thickness = 1.5
-            stroke.Transparency = 0.15
-            stroke.Color = Color3.new(0, 0, 0)
-            stroke.Parent = label
+        local main = gen:FindFirstChild("defaultMaterial", true) or (gen:IsA("Model") and gen.PrimaryPart) or gen:FindFirstChildWhichIsA("BasePart", true)
+        if not main then return false end
+        if not bb then
+            bb = Instance.new("BillboardGui")
+            bb.Name = "CigarGenProgress"
+            bb.Adornee = main
+            bb.AlwaysOnTop = true
+            bb.LightInfluence = 0
+            bb.ResetOnSpawn = false
+            bb.MaxDistance = 260
+            bb.Size = UDim2.new(0, 160, 0, 36)
+            bb.StudsOffset = Vector3.new(0, 1.95, 0)
+            bb.Parent = gen
+            local l = Instance.new("TextLabel")
+            l.Name = "Label"
+            l.BackgroundTransparency = 1
+            l.Size = UDim2.fromScale(1, 1)
+            l.Font = Enum.Font.GothamBold
+            l.TextSize = 16
+            l.Text = txt
+            l.TextColor3 = color
+            l.TextStrokeTransparency = 0
+            l.Parent = bb
+            local s = Instance.new("UIStroke")
+            s.Thickness = 1.5
+            s.Transparency = 0.15
+            s.Color = Color3.new(0, 0, 0)
+            s.Parent = l
         else
-            local label = billboard:FindFirstChild("Label")
-            if label then label.Text = txt label.TextColor3 = color end
+            local l = bb:FindFirstChild("Label")
+            if l then l.Text = txt l.TextColor3 = color end
         end
     else
-        if billboard then billboard:Destroy() gen:SetAttribute("CigarGenLastPct", nil) end
+        if bb then bb:Destroy() gen:SetAttribute("CigarGenLastPct", nil) end
     end
     return false
 end
 
 local function MonitorGeneratorProgress(gen)
-    local function update() if not Config.espGeneratorEnabled then return end UpdateGeneratorEsp(gen) end
+    local function u() if not Config.espGeneratorEnabled then return end UpdateGeneratorEsp(gen) end
     pcall(function()
-        gen:GetAttributeChangedSignal("RepairProgress"):Connect(update)
-        gen:GetAttributeChangedSignal("Progress"):Connect(update)
-        gen:GetAttributeChangedSignal("Completed"):Connect(update)
-        gen:GetAttributeChangedSignal("IsCompleted"):Connect(update)
+        gen:GetAttributeChangedSignal("RepairProgress"):Connect(u)
+        gen:GetAttributeChangedSignal("Progress"):Connect(u)
+        gen:GetAttributeChangedSignal("Completed"):Connect(u)
+        gen:GetAttributeChangedSignal("IsCompleted"):Connect(u)
     end)
-    gen.ChildAdded:Connect(function(child)
-        if child.Name == "RepairProgress" or child.Name == "Progress" or child.Name == "Completed" or child.Name == "IsCompleted" then
-            if child:IsA("ValueBase") then child.Changed:Connect(update) end
-            update()
+    gen.ChildAdded:Connect(function(c)
+        if c.Name == "RepairProgress" or c.Name == "Progress" or c.Name == "Completed" or c.Name == "IsCompleted" then
+            if c:IsA("ValueBase") then c.Changed:Connect(u) end
+            u()
         end
     end)
 end
 
 local function MonitorPalletState(pallet, meta)
-    local function update()
-        local dropped = GetAttributeOrValue(pallet, "Dropped") or GetAttributeOrValue(pallet, "IsDropped")
-        local broken = GetAttributeOrValue(pallet, "Broken") or GetAttributeOrValue(pallet, "IsBroken") or GetAttributeOrValue(pallet, "Destroyed")
-        if dropped or broken or meta.isFake then
+    local function u()
+        local d = GetAttributeOrValue(pallet, "Dropped") or GetAttributeOrValue(pallet, "IsDropped")
+        local b = GetAttributeOrValue(pallet, "Broken") or GetAttributeOrValue(pallet, "IsBroken") or GetAttributeOrValue(pallet, "Destroyed")
+        if d or b or meta.isFake then
             RemoveHighlight(pallet)
             for i, p in ipairs(CheatState.cachedMapObjects.Pallets) do
                 if p == pallet then table.remove(CheatState.cachedMapObjects.Pallets, i) break end
@@ -1084,37 +902,35 @@ local function MonitorPalletState(pallet, meta)
         end
     end
     for _, n in ipairs({"Dropped", "IsDropped", "Broken", "IsBroken", "Destroyed"}) do
-        pallet:GetAttributeChangedSignal(n):Connect(update)
+        pcall(function() pallet:GetAttributeChangedSignal(n):Connect(u) end)
     end
 end
 
 local function OnMapObjectAdded(obj)
-    local name = obj.Name
-    if name == "Generator" then
+    local n = obj.Name
+    if n == "Generator" then
         table.insert(CheatState.cachedMapObjects.Generators, obj)
         if Config.espGeneratorEnabled then UpdateGeneratorEsp(obj) MonitorGeneratorProgress(obj) end
-    elseif name == "Hook" then
+    elseif n == "Hook" then
         table.insert(CheatState.cachedMapObjects.Hooks, obj)
         local mesh = {}
-        local model = obj:FindFirstChild("Model")
-        if model then
-            for _, child in ipairs(model:GetDescendants()) do if child:IsA("MeshPart") then table.insert(mesh, child) end end
-        end
+        local m = obj:FindFirstChild("Model")
+        if m then for _, c in ipairs(m:GetDescendants()) do if c:IsA("MeshPart") then table.insert(mesh, c) end end end
         CheatState.cachedHookMeshParts[obj] = mesh
         if Config.espHookEnabled then
             if #mesh > 0 then for _, mp in ipairs(mesh) do CreateHighlight(mp, Config.espHookColor, 0.6) end
             else CreateHighlight(obj, Config.espHookColor, 0.6) end
         end
-    elseif name == "Gate" then
+    elseif n == "Gate" then
         table.insert(CheatState.cachedMapObjects.Gates, obj)
         if Config.espGateEnabled then CreateHighlight(obj, Config.espGateColor, 0.6) end
         if CheatState.ghostGateEnabled then Hub.ApplyGhostGateToObj(obj, true) end
-    elseif name == "Pallet" or name == "Palletwrong" then
+    elseif n == "Pallet" or n == "Palletwrong" then
         table.insert(CheatState.cachedMapObjects.Pallets, obj)
-        local lower = name:lower()
+        local lower = n:lower()
         local part = (obj:IsA("Model") and obj.PrimaryPart) or obj:FindFirstChildWhichIsA("BasePart", true) or (obj:IsA("BasePart") and obj)
-        local isFake = lower:find("fake") or lower:find("broken") or lower:find("destroyed")
-        local meta = {part = part, isFake = isFake and true or false}
+        local fake = lower:find("fake") or lower:find("broken") or lower:find("destroyed")
+        local meta = {part = part, isFake = fake and true or false}
         CheatState.cachedPalletMeta[obj] = meta
         if Config.espPalletEnabled and not meta.isFake then CreateHighlight(obj, Config.espPalletColor, 0.6) end
         MonitorPalletState(obj, meta)
@@ -1122,44 +938,44 @@ local function OnMapObjectAdded(obj)
 end
 
 local function OnMapObjectRemoved(obj)
-    local name = obj.Name
-    if name == "Generator" then
+    local n = obj.Name
+    if n == "Generator" then
         for i, g in ipairs(CheatState.cachedMapObjects.Generators) do if g == obj then table.remove(CheatState.cachedMapObjects.Generators, i) break end end
         CheatState.completedGenerators[obj] = nil
         RemoveHighlight(obj)
         local bb = obj:FindFirstChild("CigarGenProgress") if bb then bb:Destroy() end
-    elseif name == "Hook" then
+    elseif n == "Hook" then
         for i, h in ipairs(CheatState.cachedMapObjects.Hooks) do if h == obj then table.remove(CheatState.cachedMapObjects.Hooks, i) break end end
         local mesh = CheatState.cachedHookMeshParts[obj]
         if mesh then for _, mp in ipairs(mesh) do RemoveHighlight(mp) end else RemoveHighlight(obj) end
         CheatState.cachedHookMeshParts[obj] = nil
-    elseif name == "Gate" then
+    elseif n == "Gate" then
         for i, g in ipairs(CheatState.cachedMapObjects.Gates) do if g == obj then table.remove(CheatState.cachedMapObjects.Gates, i) break end end
         RemoveHighlight(obj)
-    elseif name == "Pallet" or name == "Palletwrong" then
+    elseif n == "Pallet" or n == "Palletwrong" then
         for i, p in ipairs(CheatState.cachedMapObjects.Pallets) do if p == obj then table.remove(CheatState.cachedMapObjects.Pallets, i) break end end
         RemoveHighlight(obj)
         CheatState.cachedPalletMeta[obj] = nil
     end
 end
 
-local function InitializeMapEsp(mapFolder)
-    if not mapFolder then return end
+local function InitializeMapEsp(map)
+    if not map then return end
     CheatState.cachedMapObjects = {Generators = {}, Pallets = {}, Hooks = {}, Gates = {}}
     CheatState.cachedPalletMeta = {}
     CheatState.cachedHookMeshParts = {}
     CheatState.completedGenerators = {}
-    for _, d in ipairs(mapFolder:GetDescendants()) do OnMapObjectAdded(d) end
-    mapFolder.DescendantAdded:Connect(OnMapObjectAdded)
-    mapFolder.DescendantRemoving:Connect(OnMapObjectRemoved)
+    for _, d in ipairs(map:GetDescendants()) do OnMapObjectAdded(d) end
+    map.DescendantAdded:Connect(OnMapObjectAdded)
+    map.DescendantRemoving:Connect(OnMapObjectRemoved)
     CheatState.objEspInitialized = true
 end
 
 local mapObj = Workspace:FindFirstChild("Map")
-if mapObj then InitializeMapEsp(mapObj) end
-Workspace.ChildAdded:Connect(function(child) if child.Name == "Map" then task.wait(2) InitializeMapEsp(child) end end)
-Workspace.ChildRemoved:Connect(function(child)
-    if child.Name == "Map" then
+if mapObj then pcall(InitializeMapEsp, mapObj) end
+Workspace.ChildAdded:Connect(function(c) if c.Name == "Map" then task.wait(2) pcall(InitializeMapEsp, c) end end)
+Workspace.ChildRemoved:Connect(function(c)
+    if c.Name == "Map" then
         CheatState.cachedMapObjects = {Generators = {}, Pallets = {}, Hooks = {}, Gates = {}}
         CheatState.cachedPalletMeta = {}
         CheatState.cachedHookMeshParts = {}
@@ -1172,19 +988,19 @@ local function UpdateMapEsp()
     if not CheatState.objEspInitialized then return end
     if Config.espGeneratorEnabled then
         local valid = {}
-        for _, gen in ipairs(CheatState.cachedMapObjects.Generators) do
-            if gen and gen.Parent then
-                local done = UpdateGeneratorEsp(gen)
-                if not done then table.insert(valid, gen) end
+        for _, g in ipairs(CheatState.cachedMapObjects.Generators) do
+            if g and g.Parent then
+                local done = UpdateGeneratorEsp(g)
+                if not done then table.insert(valid, g) end
             end
         end
         CheatState.cachedMapObjects.Generators = valid
     else
-        for _, gen in ipairs(CheatState.cachedMapObjects.Generators) do
-            if gen and gen.Parent then
-                RemoveHighlight(gen)
-                local bb = gen:FindFirstChild("CigarGenProgress") if bb then bb:Destroy() end
-                gen:SetAttribute("CigarGenLastPct", nil)
+        for _, g in ipairs(CheatState.cachedMapObjects.Generators) do
+            if g and g.Parent then
+                RemoveHighlight(g)
+                local bb = g:FindFirstChild("CigarGenProgress") if bb then bb:Destroy() end
+                g:SetAttribute("CigarGenLastPct", nil)
             end
         end
     end
@@ -1222,40 +1038,40 @@ local function UpdateMapEsp()
 end
 
 -- =======================================================
--- MODULE: KILLER WARN
+-- KILLER WARN
 -- =======================================================
 local function CheckKillerProximity()
     if not Config.warnEnabled then return end
-    local myChar = LocalPlayer.Character
-    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    local my = LocalPlayer.Character
+    local myRoot = my and my:FindFirstChild("HumanoidRootPart")
     if not myRoot then return end
     local nearest = math.huge
-    for _, player in ipairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer and GetPlayerRole(player) == "killer" then
-            local char = player.Character
-            local root = char and char:FindFirstChild("HumanoidRootPart")
-            if root then
-                local d = (root.Position - myRoot.Position).Magnitude
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and GetPlayerRole(p) == "killer" then
+            local c = p.Character
+            local r = c and c:FindFirstChild("HumanoidRootPart")
+            if r then
+                local d = (r.Position - myRoot.Position).Magnitude
                 if d < nearest then nearest = d end
             end
         end
     end
     if nearest <= Config.warnDist3 and CheatState.lastWarnLevel ~= 3 then
         CheatState.lastWarnLevel = 3
-        CigarUI:MakeNotify({Title = "KILLER NEARBY", Description = "WARNING", Content = "Very close! (" .. math.floor(nearest) .. "m)", Color = Color3.fromRGB(255, 30, 30), Delay = 3})
+        pcall(function() CigarUI:MakeNotify({Title = "KILLER NEARBY", Description = "WARNING", Content = "Very close! (" .. math.floor(nearest) .. "m)", Color = Color3.fromRGB(255, 30, 30), Delay = 3}) end)
     elseif nearest <= Config.warnDist2 and nearest > Config.warnDist3 and CheatState.lastWarnLevel ~= 2 then
         CheatState.lastWarnLevel = 2
-        CigarUI:MakeNotify({Title = "KILLER APPROACHING", Description = "WARNING", Content = "Approaching (" .. math.floor(nearest) .. "m)", Color = Color3.fromRGB(255, 150, 0), Delay = 3})
+        pcall(function() CigarUI:MakeNotify({Title = "KILLER APPROACHING", Description = "WARNING", Content = "Approaching (" .. math.floor(nearest) .. "m)", Color = Color3.fromRGB(255, 150, 0), Delay = 3}) end)
     elseif nearest <= Config.warnDist1 and nearest > Config.warnDist2 and CheatState.lastWarnLevel ~= 1 then
         CheatState.lastWarnLevel = 1
-        CigarUI:MakeNotify({Title = "KILLER SPOTTED", Description = "WARNING", Content = "Spotted (" .. math.floor(nearest) .. "m)", Color = Color3.fromRGB(255, 220, 0), Delay = 3})
+        pcall(function() CigarUI:MakeNotify({Title = "KILLER SPOTTED", Description = "WARNING", Content = "Spotted (" .. math.floor(nearest) .. "m)", Color = Color3.fromRGB(255, 220, 0), Delay = 3}) end)
     elseif nearest > Config.warnDist1 then
         CheatState.lastWarnLevel = 0
     end
 end
 
 -- =======================================================
--- MODULE: AUTO GENERATOR SKILLCHECK
+-- AUTO GENERATOR SKILLCHECK
 -- =======================================================
 local cachedActionBtn = nil
 local instantLastVisible = false
@@ -1263,12 +1079,12 @@ local lastGoalRot = nil
 local lastPressTime = 0
 
 local function GetSkillCheckObjects()
-    for _, guiName in ipairs({"SkillCheckPromptGui", "SkillCheckPromptGui-con"}) do
-        local gui = PlayerGui:FindFirstChild(guiName, true)
+    for _, n in ipairs({"SkillCheckPromptGui", "SkillCheckPromptGui-con"}) do
+        local gui = PlayerGui:FindFirstChild(n, true)
         if gui then
-            local check = gui:FindFirstChild("Check", true)
-            if check and check.Visible then
-                return check:FindFirstChild("Line", true), check:FindFirstChild("Goal", true)
+            local c = gui:FindFirstChild("Check", true)
+            if c and c.Visible then
+                return c:FindFirstChild("Line", true), c:FindFirstChild("Goal", true)
             end
         end
     end
@@ -1278,12 +1094,12 @@ end
 local function GetActionButton()
     if cachedActionBtn and cachedActionBtn.Parent and cachedActionBtn:IsA("GuiButton") then return cachedActionBtn end
     cachedActionBtn = nil
-    local survivorMob = PlayerGui:FindFirstChild("Survivor-mob", true)
-    if not survivorMob then return nil end
-    local controls = survivorMob:FindFirstChild("Controls", true)
-    if not controls then return nil end
-    local action = controls:FindFirstChild("action") or controls:FindFirstChild("Gui-mob")
-    if action and action:IsA("GuiButton") then cachedActionBtn = action return action end
+    local mob = PlayerGui:FindFirstChild("Survivor-mob", true)
+    if not mob then return nil end
+    local ctrl = mob:FindFirstChild("Controls", true)
+    if not ctrl then return nil end
+    local a = ctrl:FindFirstChild("action") or ctrl:FindFirstChild("Gui-mob")
+    if a and a:IsA("GuiButton") then cachedActionBtn = a return a end
     return nil
 end
 
@@ -1310,9 +1126,11 @@ local function TriggerSkillCheckHit()
         end)
         return
     end
-    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Space, false, game)
-    task.wait()
-    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Space, false, game)
+    pcall(function()
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Space, false, game)
+        task.wait()
+        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Space, false, game)
+    end)
 end
 
 local function HandleAutoGenerators()
@@ -1323,127 +1141,126 @@ local function HandleAutoGenerators()
         lastGoalRot = nil
         return
     end
-    local goalRot = goal.Rotation
-    local lineRot = line.Rotation
+    local gr = goal.Rotation
+    local lr = line.Rotation
     local now = tick()
-
     if Config.autoGeneratorMode == "Instant" then
-        line.Rotation = goalRot + 109
-        if not instantLastVisible or goalRot ~= lastGoalRot then
+        line.Rotation = gr + 109
+        if not instantLastVisible or gr ~= lastGoalRot then
             if now - lastPressTime > 0.05 then
-                lastGoalRot = goalRot
+                lastGoalRot = gr
                 instantLastVisible = true
                 lastPressTime = now
                 TriggerSkillCheckHit()
             end
         end
     elseif Config.autoGeneratorMode == "Perfect" then
-        local diff = (lineRot - goalRot) % 360
-        if now - lastPressTime > 0.15 then
-            if diff >= 102 and diff <= 109 then lastPressTime = now TriggerSkillCheckHit() end
+        local diff = (lr - gr) % 360
+        if now - lastPressTime > 0.15 and diff >= 102 and diff <= 109 then
+            lastPressTime = now
+            TriggerSkillCheckHit()
         end
     else
-        local diff = (lineRot - goalRot) % 360
-        if now - lastPressTime > 0.15 then
-            if diff >= 125 and diff <= 140 then lastPressTime = now TriggerSkillCheckHit() end
+        local diff = (lr - gr) % 360
+        if now - lastPressTime > 0.15 and diff >= 125 and diff <= 140 then
+            lastPressTime = now
+            TriggerSkillCheckHit()
         end
     end
 end
 
 -- =======================================================
--- MODULE: CROSSHAIR
+-- CROSSHAIR
 -- =======================================================
 local crosshairTypes = {"Plus", "Cross (X)", "Dot", "Circle", "Circle + Dot", "T-Shape", "Square"}
 
-local function ClearCrosshair(container)
-    for _, child in ipairs(container:GetChildren()) do child:Destroy() end
+local function ClearCrosshair(c)
+    for _, ch in ipairs(c:GetChildren()) do ch:Destroy() end
     CheatState.crosshairState.Frames = {}
     CheatState.crosshairState.Strokes = {}
     CheatState.crosshairState.DotFrames = {}
 end
 
-local function DrawCrosshairShape(container, sx, sy, length, thickness, color, opacity)
-    local len = math.max(1, math.round(length * opacity))
-    local th = math.max(1, math.round(thickness * opacity))
-    local px = math.round(40 + sx * opacity - len * 0.5)
-    local py = math.round(40 + sy * opacity - th * 0.5)
-    local frame = Instance.new("Frame")
-    frame.BackgroundColor3 = color
-    frame.BackgroundTransparency = 1 - opacity
-    frame.BorderSizePixel = 0
-    frame.Size = UDim2.fromOffset(len, th)
-    frame.Position = UDim2.fromOffset(px, py)
-    frame.Parent = container
-    table.insert(CheatState.crosshairState.Frames, frame)
-    return frame
+local function DrawShape(c, sx, sy, len, th, color, op)
+    local l = math.max(1, math.round(len * op))
+    local t = math.max(1, math.round(th * op))
+    local px = math.round(40 + sx * op - l * 0.5)
+    local py = math.round(40 + sy * op - t * 0.5)
+    local f = Instance.new("Frame")
+    f.BackgroundColor3 = color
+    f.BackgroundTransparency = 1 - op
+    f.BorderSizePixel = 0
+    f.Size = UDim2.fromOffset(l, t)
+    f.Position = UDim2.fromOffset(px, py)
+    f.Parent = c
+    table.insert(CheatState.crosshairState.Frames, f)
+    return f
 end
 
-local function RenderCrosshair(container, style, color, opacity)
-    if container:FindFirstChildOfClass("Frame") then
-        ClearCrosshair(container)
-    end
-    local sizeMul = 0.4 + (Config.crosshairSize / 100) * 1.1
+local function RenderCrosshair(c, style, color, op)
+    ClearCrosshair(c)
+    local mul = 0.4 + (Config.crosshairSize / 100) * 1.1
     if style == "Plus" then
-        DrawCrosshairShape(container, 0, 0, 8*2+3, 3, color, opacity)
-        DrawCrosshairShape(container, 0, 0, 3, 8*2+3, color, opacity)
-        local dot = DrawCrosshairShape(container, 0, 0, 5, 5, Color3.fromRGB(255,255,255), opacity)
-        table.insert(CheatState.crosshairState.DotFrames, dot)
+        DrawShape(c, 0, 0, 19, 3, color, op)
+        DrawShape(c, 0, 0, 3, 19, color, op)
+        local d = DrawShape(c, 0, 0, 5, 5, Color3.fromRGB(255,255,255), op)
+        table.insert(CheatState.crosshairState.DotFrames, d)
     elseif style == "Cross (X)" then
         for _, rot in ipairs({45, -45}) do
-            local len = math.max(1, math.round(20 * sizeMul * opacity))
-            local th = math.max(1, math.round(3 * opacity))
-            local frame = Instance.new("Frame")
-            frame.BackgroundColor3 = color
-            frame.BackgroundTransparency = 1 - opacity
-            frame.BorderSizePixel = 0
-            frame.Size = UDim2.fromOffset(len, th)
-            frame.Position = UDim2.fromOffset(40 - math.round(len*0.5), 40 - math.round(th*0.5))
-            frame.Rotation = rot
-            frame.Parent = container
-            table.insert(CheatState.crosshairState.Frames, frame)
+            local l = math.max(1, math.round(20 * mul * op))
+            local t = math.max(1, math.round(3 * op))
+            local f = Instance.new("Frame")
+            f.BackgroundColor3 = color
+            f.BackgroundTransparency = 1 - op
+            f.BorderSizePixel = 0
+            f.Size = UDim2.fromOffset(l, t)
+            f.Position = UDim2.fromOffset(40 - math.round(l*0.5), 40 - math.round(t*0.5))
+            f.Rotation = rot
+            f.Parent = c
+            table.insert(CheatState.crosshairState.Frames, f)
         end
     elseif style == "Dot" then
-        local dot = DrawCrosshairShape(container, 0, 0, 10, 10, color, opacity)
-        local c = Instance.new("UICorner") c.CornerRadius = UDim.new(1,0) c.Parent = dot
+        local d = DrawShape(c, 0, 0, 10, 10, color, op)
+        local cc = Instance.new("UICorner") cc.CornerRadius = UDim.new(1,0) cc.Parent = d
     elseif style == "Circle" then
-        local r = math.max(6, math.round(10 * sizeMul * opacity))
-        local frame = Instance.new("Frame")
-        frame.BackgroundTransparency = 1
-        frame.Size = UDim2.fromOffset(r*2, r*2)
-        frame.Position = UDim2.fromOffset(40-r, 40-r)
-        frame.Parent = container
-        local c = Instance.new("UICorner") c.CornerRadius = UDim.new(1,0) c.Parent = frame
+        local r = math.max(6, math.round(10 * mul * op))
+        local f = Instance.new("Frame")
+        f.BackgroundTransparency = 1
+        f.Size = UDim2.fromOffset(r*2, r*2)
+        f.Position = UDim2.fromOffset(40-r, 40-r)
+        f.Parent = c
+        local cc = Instance.new("UICorner") cc.CornerRadius = UDim.new(1,0) cc.Parent = f
         local s = Instance.new("UIStroke")
-        s.Color = color s.Thickness = math.max(2, math.round(2.5*opacity)) s.Transparency = 1-opacity
-        s.Parent = frame
+        s.Color = color s.Thickness = math.max(2, math.round(2.5*op)) s.Transparency = 1-op
+        s.Parent = f
         table.insert(CheatState.crosshairState.Strokes, s)
     elseif style == "Circle + Dot" then
-        local r = math.max(6, math.round(10 * sizeMul * opacity))
-        local frame = Instance.new("Frame")
-        frame.BackgroundTransparency = 1
-        frame.Size = UDim2.fromOffset(r*2, r*2)
-        frame.Position = UDim2.fromOffset(40-r, 40-r)
-        frame.Parent = container
-        local c = Instance.new("UICorner") c.CornerRadius = UDim.new(1,0) c.Parent = frame
+        local r = math.max(6, math.round(10 * mul * op))
+        local f = Instance.new("Frame")
+        f.BackgroundTransparency = 1
+        f.Size = UDim2.fromOffset(r*2, r*2)
+        f.Position = UDim2.fromOffset(40-r, 40-r)
+        f.Parent = c
+        local cc = Instance.new("UICorner") cc.CornerRadius = UDim.new(1,0) cc.Parent = f
         local s = Instance.new("UIStroke")
-        s.Color = color s.Thickness = math.max(2, math.round(2.5*opacity)) s.Transparency = 1-opacity
-        s.Parent = frame
+        s.Color = color s.Thickness = math.max(2, math.round(2.5*op)) s.Transparency = 1-op
+        s.Parent = f
         table.insert(CheatState.crosshairState.Strokes, s)
-        local dot = DrawCrosshairShape(container, 0, 0, 6, 6, color, opacity)
-        local c2 = Instance.new("UICorner") c2.CornerRadius = UDim.new(1,0) c2.Parent = dot
+        local d = DrawShape(c, 0, 0, 6, 6, color, op)
+        local cc2 = Instance.new("UICorner") cc2.CornerRadius = UDim.new(1,0) cc2.Parent = d
     elseif style == "T-Shape" then
-        DrawCrosshairShape(container, 0, -4, 3, 8, color, opacity)
-        DrawCrosshairShape(container, 0, 0, 8*2+3, 3, color, opacity)
+        DrawShape(c, 0, -4, 3, 8, color, op)
+        DrawShape(c, 0, 0, 19, 3, color, op)
     elseif style == "Square" then
-        local off, len, th = 10, 6, 3
-        DrawCrosshairShape(container, -(off-len*0.5), -off, len, th, color, opacity)
-        DrawCrosshairShape(container, -off, -(off-len*0.5), th, len, color, opacity)
-        DrawCrosshairShape(container, (off-len*0.5), -off, len, th, color, opacity)
-        DrawCrosshairShape(container, off, -(off-len*0.5), th, len, color, opacity)
-        DrawCrosshairShape(container, -(off-len*0.5), off, len, th, color, opacity)
-        DrawCrosshairShape(container, -off, (off-len*0.5), th, len, color, opacity)
-        DrawCrosshairShape(container, (off-len*0.5), off, len, th, color, opacity)
-        DrawCrosshairShape(container, off, (off-len*0.5), th, len, color, opacity)
+        local o, l, t = 10, 6, 3
+        DrawShape(c, -(o-l*0.5), -o, l, t, color, op)
+        DrawShape(c, -o, -(o-l*0.5), t, l, color, op)
+        DrawShape(c, (o-l*0.5), -o, l, t, color, op)
+        DrawShape(c, o, -(o-l*0.5), t, l, color, op)
+        DrawShape(c, -(o-l*0.5), o, l, t, color, op)
+        DrawShape(c, -o, (o-l*0.5), t, l, color, op)
+        DrawShape(c, (o-l*0.5), o, l, t, color, op)
+        DrawShape(c, o, (o-l*0.5), t, l, color, op)
     end
 end
 
@@ -1455,22 +1272,16 @@ local function ShowCrosshair()
     sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     sg.IgnoreGuiInset = true
     sg.Parent = PlayerGui
-    local container = Instance.new("Frame")
-    container.Name = "CrosshairContainer"
-    container.Size = UDim2.fromOffset(80, 80)
-    container.AnchorPoint = Vector2.new(0.5, 0.5)
-    container.BackgroundTransparency = 1
-    container.BorderSizePixel = 0
-    container.Position = UDim2.new(Config.crosshairPosX, 0, Config.crosshairPosY, 0)
-    container.Parent = sg
-    RenderCrosshair(container, Config.crosshairStyle, Config.crosshairColor, Config.crosshairOpacity)
+    local c = Instance.new("Frame")
+    c.Name = "CrosshairContainer"
+    c.Size = UDim2.fromOffset(80, 80)
+    c.AnchorPoint = Vector2.new(0.5, 0.5)
+    c.BackgroundTransparency = 1
+    c.BorderSizePixel = 0
+    c.Position = UDim2.new(Config.crosshairPosX, 0, Config.crosshairPosY, 0)
+    c.Parent = sg
+    RenderCrosshair(c, Config.crosshairStyle, Config.crosshairColor, Config.crosshairOpacity)
     CheatState.crosshairGui = sg
-end
-
-local function UpdateCrosshairPosition()
-    if not CheatState.crosshairGui then return end
-    local c = CheatState.crosshairGui:FindFirstChild("CrosshairContainer")
-    if c then c.Position = UDim2.new(Config.crosshairPosX, 0, Config.crosshairPosY, 0) end
 end
 
 local function DestroyCrosshair()
@@ -1479,7 +1290,7 @@ local function DestroyCrosshair()
 end
 
 -- =======================================================
--- MODULE: PERF MONITOR
+-- PERF MONITOR
 -- =======================================================
 local perfFrames = 0
 local perfLastTime = tick()
@@ -1492,26 +1303,26 @@ local function EnablePerfMonitor()
     sg.ResetOnSpawn = false
     sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     sg.Parent = PlayerGui
-    local frame = Instance.new("Frame")
-    frame.Name = "PerfFrame"
-    frame.Size = UDim2.fromOffset(160, 28)
-    frame.AnchorPoint = Vector2.new(1, 0)
-    frame.Position = UDim2.new(1, -10, 0, 10)
-    frame.BackgroundColor3 = Color3.fromRGB(10, 10, 14)
-    frame.BorderSizePixel = 0
-    frame.Parent = sg
-    local c = Instance.new("UICorner") c.CornerRadius = UDim.new(0, 8) c.Parent = frame
-    local s = Instance.new("UIStroke") s.Color = Color3.fromRGB(60,60,75) s.Thickness = 1 s.Parent = frame
-    local label = Instance.new("TextLabel")
-    label.Name = "InfoLabel"
-    label.Size = UDim2.new(1,0,1,0)
-    label.BackgroundTransparency = 1
-    label.Text = "FPS -- | PING --"
-    label.TextColor3 = Color3.fromRGB(200,200,210)
-    label.TextSize = 12
-    label.Font = Enum.Font.GothamBold
-    label.RichText = true
-    label.Parent = frame
+    local f = Instance.new("Frame")
+    f.Name = "PerfFrame"
+    f.Size = UDim2.fromOffset(160, 28)
+    f.AnchorPoint = Vector2.new(1, 0)
+    f.Position = UDim2.new(1, -10, 0, 10)
+    f.BackgroundColor3 = Color3.fromRGB(10, 10, 14)
+    f.BorderSizePixel = 0
+    f.Parent = sg
+    local c = Instance.new("UICorner") c.CornerRadius = UDim.new(0, 8) c.Parent = f
+    local s = Instance.new("UIStroke") s.Color = Color3.fromRGB(60,60,75) s.Thickness = 1 s.Parent = f
+    local l = Instance.new("TextLabel")
+    l.Name = "InfoLabel"
+    l.Size = UDim2.new(1,0,1,0)
+    l.BackgroundTransparency = 1
+    l.Text = "FPS -- | PING --"
+    l.TextColor3 = Color3.fromRGB(200,200,210)
+    l.TextSize = 12
+    l.Font = Enum.Font.GothamBold
+    l.RichText = true
+    l.Parent = f
     CheatState.perfGui = sg
     CheatState.perfEnabled = true
     perfFrames = 0
@@ -1523,31 +1334,8 @@ local function DisablePerfMonitor()
     if CheatState.perfGui then CheatState.perfGui:Destroy() CheatState.perfGui = nil end
 end
 
-RunService.RenderStepped:Connect(function()
-    if not CheatState.perfEnabled then return end
-    perfFrames = perfFrames + 1
-    local now = tick()
-    if now - perfLastTime >= 0.5 then
-        local fps = math.floor(perfFrames / (now - perfLastTime))
-        perfFrames = 0
-        perfLastTime = now
-        pcall(function() perfPing = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue()) end)
-        local fpsColor = fps >= 50 and "rgb(80,220,100)" or (fps >= 30 and "rgb(255,200,60)" or "rgb(255,70,70)")
-        local pingColor = perfPing <= 80 and "rgb(80,220,100)" or (perfPing <= 150 and "rgb(255,200,60)" or "rgb(255,70,70)")
-        if CheatState.perfGui and CheatState.perfGui.Parent then
-            local f = CheatState.perfGui:FindFirstChild("PerfFrame")
-            if f then
-                local l = f:FindFirstChild("InfoLabel")
-                if l then
-                    l.Text = string.format('<font color="%s">FPS %d</font> <font color="rgb(60,60,75)">|</font> <font color="%s">PING %d</font>', fpsColor, fps, pingColor, perfPing)
-                end
-            end
-        end
-    end
-end)
-
 -- =======================================================
--- MODULE: NAME PROTECT
+-- NAME PROTECT
 -- =======================================================
 local function GetOrAssignFakeName(player)
     if not CheatState.pnameFakeNames[player] then
@@ -1557,39 +1345,39 @@ local function GetOrAssignFakeName(player)
     return CheatState.pnameFakeNames[player]
 end
 
-local function UpdateCharacterNameTag(character, fakeName)
-    if not character then return end
-    local head = character:FindFirstChild("Head")
-    if not head then return end
-    for _, c in ipairs(head:GetChildren()) do
+local function UpdateCharacterNameTag(char, fake)
+    if not char then return end
+    local h = char:FindFirstChild("Head")
+    if not h then return end
+    for _, c in ipairs(h:GetChildren()) do
         if c:IsA("BillboardGui") then
-            local lbl = c:FindFirstChildWhichIsA("TextLabel")
-            if lbl then lbl.Text = fakeName end
+            local l = c:FindFirstChildWhichIsA("TextLabel")
+            if l then l.Text = fake end
         end
     end
 end
 
-local function RestoreCharacterNameTag(character, origName)
-    if not character then return end
-    local head = character:FindFirstChild("Head")
-    if head then
-        for _, c in ipairs(head:GetChildren()) do
+local function RestoreCharacterNameTag(char, orig)
+    if not char then return end
+    local h = char:FindFirstChild("Head")
+    if h then
+        for _, c in ipairs(h:GetChildren()) do
             if c:IsA("BillboardGui") then
-                local lbl = c:FindFirstChildWhichIsA("TextLabel")
-                if lbl then lbl.Text = origName end
+                local l = c:FindFirstChildWhichIsA("TextLabel")
+                if l then l.Text = orig end
             end
         end
     end
 end
 
-local function GetSurvivorNameLabel(userId)
+local function GetSurvivorNameLabel(uid)
     local mob = PlayerGui:FindFirstChild("Survivor-mob", true)
     if not mob then return nil end
-    local frame = mob:FindFirstChild("Frame")
-    if not frame then return nil end
+    local fr = mob:FindFirstChild("Frame")
+    if not fr then return nil end
     for i = 1, 5 do
-        local s = frame:FindFirstChild("Survivor" .. i)
-        if s and s:GetAttribute("UserId") == userId then
+        local s = fr:FindFirstChild("Survivor" .. i)
+        if s and s:GetAttribute("UserId") == uid then
             return s:FindFirstChild("TextLabel")
         end
     end
@@ -1598,14 +1386,11 @@ end
 
 local function UpdatePlayerDisplayName(player)
     if player == LocalPlayer then return end
-    local fakeName = GetOrAssignFakeName(player)
-    if CheatState.espObjects[player] then
-        CheatState.espObjects[player].nameLabel.Text = fakeName
-    end
-    if player.Character then UpdateCharacterNameTag(player.Character, fakeName) end
-    local lbl = GetSurvivorNameLabel(player.UserId)
-    if lbl then lbl.Text = fakeName end
-
+    local fake = GetOrAssignFakeName(player)
+    if CheatState.espObjects[player] then CheatState.espObjects[player].nameLabel.Text = fake end
+    if player.Character then UpdateCharacterNameTag(player.Character, fake) end
+    local l = GetSurvivorNameLabel(player.UserId)
+    if l then l.Text = fake end
     if not CheatState.pnameNameConns[player] then
         CheatState.pnameNameConns[player] = player.CharacterAdded:Connect(function(ch)
             if not CheatState.pnameEnabled then return end
@@ -1613,8 +1398,8 @@ local function UpdatePlayerDisplayName(player)
             task.wait(0.5)
             UpdateCharacterNameTag(ch, fn)
             if CheatState.espObjects[player] then CheatState.espObjects[player].nameLabel.Text = fn end
-            local l = GetSurvivorNameLabel(player.UserId)
-            if l then l.Text = fn end
+            local ll = GetSurvivorNameLabel(player.UserId)
+            if ll then ll.Text = fn end
         end)
     end
 end
@@ -1623,23 +1408,20 @@ local function UpdatePlayerNameTag(player)
     if player == LocalPlayer then return end
     if CheatState.espObjects[player] then CheatState.espObjects[player].nameLabel.Text = player.Name end
     if player.Character then RestoreCharacterNameTag(player.Character, player.Name) end
-    if CheatState.pnameNameConns[player] then
-        CheatState.pnameNameConns[player]:Disconnect()
-        CheatState.pnameNameConns[player] = nil
-    end
+    if CheatState.pnameNameConns[player] then CheatState.pnameNameConns[player]:Disconnect() CheatState.pnameNameConns[player] = nil end
     local l = GetSurvivorNameLabel(player.UserId)
     if l then l.Text = player.Name end
 end
 
 local function EnableNameProtect()
     CheatState.pnameEnabled = true
-    for _, p in ipairs(Players:GetPlayers()) do UpdatePlayerDisplayName(p) end
+    for _, p in ipairs(Players:GetPlayers()) do pcall(UpdatePlayerDisplayName, p) end
     if not CheatState.pnameWatchConn then
         CheatState.pnameWatchConn = PlayerGui.ChildAdded:Connect(function(c)
             if c.Name == "Survivor-mob" then
                 task.wait(0.2)
                 if CheatState.pnameEnabled then
-                    for _, p in ipairs(Players:GetPlayers()) do UpdatePlayerDisplayName(p) end
+                    for _, p in ipairs(Players:GetPlayers()) do pcall(UpdatePlayerDisplayName, p) end
                 end
             end
         end)
@@ -1648,7 +1430,7 @@ local function EnableNameProtect()
         CheatState.pnameAddedConn = Players.PlayerAdded:Connect(function(p)
             if CheatState.pnameEnabled then
                 task.wait(1)
-                UpdatePlayerDisplayName(p)
+                pcall(UpdatePlayerDisplayName, p)
             end
         end)
     end
@@ -1656,74 +1438,69 @@ end
 
 local function DisableNameProtect()
     CheatState.pnameEnabled = false
-    for _, conn in pairs(CheatState.pnameSlotConns) do pcall(function() conn:Disconnect() end) end
-    CheatState.pnameSlotConns = {}
     if CheatState.pnameWatchConn then CheatState.pnameWatchConn:Disconnect() CheatState.pnameWatchConn = nil end
-    for _, p in ipairs(Players:GetPlayers()) do UpdatePlayerNameTag(p) end
+    for _, p in ipairs(Players:GetPlayers()) do pcall(UpdatePlayerNameTag, p) end
     CheatState.pnameFakeNames = {}
     if CheatState.pnameAddedConn then CheatState.pnameAddedConn:Disconnect() CheatState.pnameAddedConn = nil end
 end
 
 -- =======================================================
--- MODULE: CAMERA VEIL (LEGIT AIM)
+-- CAMERA VEIL (guarded — disable if hook fails)
 -- =======================================================
 local function GetCameraOrigin()
-    local char = LocalPlayer.Character
-    local root = char and char:FindFirstChild("HumanoidRootPart")
-    if not root then return nil end
-    local cam = Workspace.CurrentCamera
-    local look = (cam and cam.CFrame.LookVector) or root.CFrame.LookVector
-    return root.Position + look * 3 + Vector3.new(0, 1.5, 0)
+    local ch = LocalPlayer.Character
+    local r = ch and ch:FindFirstChild("HumanoidRootPart")
+    if not r then return nil end
+    local c = Workspace.CurrentCamera
+    local look = (c and c.CFrame.LookVector) or r.CFrame.LookVector
+    return r.Position + look * 3 + Vector3.new(0, 1.5, 0)
 end
 
-local function GetCharacterPosition(character)
-    if not character then return nil end
-    local head = character:FindFirstChild("Head")
-    if head then return head.Position end
-    local root = character:FindFirstChild("HumanoidRootPart")
-    if root then return root.Position end
-    local up = character:FindFirstChild("UpperTorso")
-    if up then return up.Position end
-    return character.PrimaryPart and character.PrimaryPart.Position or nil
+local function GetCharPos(ch)
+    if not ch then return nil end
+    local h = ch:FindFirstChild("Head")
+    if h then return h.Position end
+    local r = ch:FindFirstChild("HumanoidRootPart")
+    if r then return r.Position end
+    local u = ch:FindFirstChild("UpperTorso")
+    if u then return u.Position end
+    return ch.PrimaryPart and ch.PrimaryPart.Position or nil
 end
 
-local function GetCharacterVelocity(character)
-    if not character then return Vector3.new(0,0,0) end
-    local lv = character.AssemblyLinearVelocity
+local function GetCharVel(ch)
+    if not ch then return Vector3.new(0,0,0) end
+    local lv = ch.AssemblyLinearVelocity
     local v = Vector3.new(lv.X, 0, lv.Z)
     if v.Magnitude > 65 then v = v.Unit * 65 end
     return v
 end
 
 local function IsHoldingSpear()
-    local char = LocalPlayer.Character
-    if not char then return false end
-    local ok, val = pcall(char.GetAttribute, char, "spearmode")
-    return ok and val == true
+    local ch = LocalPlayer.Character
+    if not ch then return false end
+    local ok, v = pcall(ch.GetAttribute, ch, "spearmode")
+    return ok and v == true
 end
 
 local function GetClosestTarget()
-    local cam = Workspace.CurrentCamera
-    if not cam then return nil end
-    local camPos, look = cam.CFrame.Position, cam.CFrame.LookVector
-    local best, minAngle = nil, Angle30Rad
-    local localChar = LocalPlayer.Character
-    local root = localChar and localChar:FindFirstChild("HumanoidRootPart")
-    if not root then return nil end
-    for _, pl in ipairs(Players:GetPlayers()) do
-        if pl ~= LocalPlayer and GetPlayerRole(pl) == "survivor" then
-            local ch = pl.Character
-            local hum = ch and ch:FindFirstChildOfClass("Humanoid")
-            if ch and hum and hum.Health > 0 then
-                local pos = GetCharacterPosition(ch)
-                if pos then
-                    local dist = (pos - root.Position).Magnitude
-                    if dist <= Config.cameraVeilMaxDistance then
-                        local dv = pos - camPos
-                        if dv.Magnitude > 0.001 then
-                            local angle = math.acos(math.clamp(look:Dot(dv.Unit), -1, 1))
-                            if angle < minAngle then minAngle = angle best = pl end
-                        end
+    local c = Workspace.CurrentCamera
+    if not c then return nil end
+    local cp, look = c.CFrame.Position, c.CFrame.LookVector
+    local best, minA = nil, Angle30Rad
+    local my = LocalPlayer.Character
+    local r = my and my:FindFirstChild("HumanoidRootPart")
+    if not r then return nil end
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and GetPlayerRole(p) == "survivor" then
+            local ch = p.Character
+            local h = ch and ch:FindFirstChildOfClass("Humanoid")
+            if ch and h and h.Health > 0 then
+                local pos = GetCharPos(ch)
+                if pos and (pos - r.Position).Magnitude <= Config.cameraVeilMaxDistance then
+                    local dv = pos - cp
+                    if dv.Magnitude > 0.001 then
+                        local a = math.acos(math.clamp(look:Dot(dv.Unit), -1, 1))
+                        if a < minA then minA = a best = p end
                     end
                 end
             end
@@ -1732,139 +1509,54 @@ local function GetClosestTarget()
     return best
 end
 
-local function SolveAimDirection(originPos, targetPos, projSpeed, gravity)
-    local offset = targetPos - originPos
-    local horiz = Vector3.new(offset.X, 0, offset.Z)
-    local distX = horiz.Magnitude
-    local distY = offset.Y
-    if offset.Magnitude <= 0.001 then return nil end
-    if distX <= 0.35 or gravity <= 0.001 then
-        return offset.Unit, math.clamp(offset.Magnitude / projSpeed, 0.025, 4)
-    end
-    local hDir = horiz.Unit
-    local directPitch = math.atan2(distY, distX)
-    local minPitch = math.max(-Angle28Rad, directPitch - Angle18Rad)
-    local maxPitch = Angle72Rad
-    local bestPitch, bestScore, bestDeltaY, bestT = nil, math.huge, math.huge, nil
-    local steps = 24
-    for i = 0, steps do
-        local sp = minPitch + (maxPitch - minPitch) * (i/steps)
-        local cosP = math.cos(sp)
-        if cosP > 0.015 then
-            local t = distX / (projSpeed * cosP)
-            if t == t and t > 0 and t >= 0.025 and t <= 4 then
-                local y = projSpeed * math.sin(sp) * t - 0.5 * gravity * t * t
-                local dy = math.abs(y - distY)
-                local anglePen = math.max(sp - Angle42Rad, 0) * 0.35
-                local timePen = math.max(t - 1.3, 0) * 0.25
-                local score = dy + anglePen + timePen
-                if score < bestScore then
-                    bestScore, bestDeltaY, bestPitch, bestT = score, dy, sp, t
-                    if dy < MinTargetDiff then break end
-                end
+local function SolveAimDirection(o, t, sp, g)
+    local off = t - o
+    local hor = Vector3.new(off.X, 0, off.Z)
+    local dx = hor.Magnitude
+    local dy = off.Y
+    if off.Magnitude <= 0.001 then return nil end
+    if dx <= 0.35 or g <= 0.001 then return off.Unit, math.clamp(off.Magnitude / sp, 0.025, 4) end
+    local h = hor.Unit
+    local dp = math.atan2(dy, dx)
+    local minP = math.max(-Angle28Rad, dp - Angle18Rad)
+    local maxP = Angle72Rad
+    local bp, bs, bdy, bt = nil, math.huge, math.huge, nil
+    for i = 0, 24 do
+        local p = minP + (maxP - minP) * (i/24)
+        local cp = math.cos(p)
+        if cp > 0.015 then
+            local tt = dx / (sp * cp)
+            if tt == tt and tt > 0 and tt >= 0.025 and tt <= 4 then
+                local y = sp * math.sin(p) * tt - 0.5 * g * tt * tt
+                local dd = math.abs(y - dy)
+                local sc = dd + math.max(p - Angle42Rad, 0) * 0.35 + math.max(tt - 1.3, 0) * 0.25
+                if sc < bs then bs, bdy, bp, bt = sc, dd, p, tt if dd < MinTargetDiff then break end end
             end
         end
     end
-    if not bestPitch then
-        local t = math.clamp(distX / projSpeed, 0.025, 4)
-        local aimPos = targetPos + Vector3.new(0, 0.5 * gravity * t * t, 0)
-        local d = aimPos - originPos
+    if not bp then
+        local tt = math.clamp(dx / sp, 0.025, 4)
+        local ap = t + Vector3.new(0, 0.5 * g * tt * tt, 0)
+        local d = ap - o
         if d.Magnitude <= 0.001 then return nil end
-        return d.Unit, t
+        return d.Unit, tt
     end
-    local dir = hDir * math.cos(bestPitch) + Vector3.new(0, math.sin(bestPitch), 0)
+    local dir = h * math.cos(bp) + Vector3.new(0, math.sin(bp), 0)
     if dir.Magnitude <= 0.001 then return nil end
-    return dir.Unit, bestT
-end
-
-local function CreateCVSnapLine()
-    if CheatState.CV_SnapGui and CheatState.CV_SnapGui.Parent then return end
-    local sg = Instance.new("ScreenGui")
-    sg.Name = "CameraVeil_SnapLine"
-    sg.IgnoreGuiInset = true
-    sg.ResetOnSpawn = false
-    sg.Parent = PlayerGui
-    local line = Instance.new("Frame")
-    line.Name = "Line"
-    line.AnchorPoint = Vector2.new(0.5, 0.5)
-    line.BorderSizePixel = 0
-    line.BackgroundColor3 = Color3.fromRGB(0, 255, 120)
-    line.BackgroundTransparency = 0.08
-    line.Visible = false
-    line.Parent = sg
-    local dot = Instance.new("Frame")
-    dot.Name = "Dot"
-    dot.AnchorPoint = Vector2.new(0.5, 0.5)
-    dot.BorderSizePixel = 0
-    dot.BackgroundColor3 = Color3.fromRGB(0, 255, 120)
-    dot.Size = UDim2.fromOffset(7, 7)
-    dot.Visible = false
-    dot.Parent = sg
-    local c = Instance.new("UICorner") c.CornerRadius = UDim.new(1,0) c.Parent = dot
-    CheatState.CV_SnapGui = sg
-    CheatState.CV_SnapLine = line
-    CheatState.CV_SnapDot = dot
-end
-
-local function UpdateCVSnapLine(targetPos)
-    if not Config.cameraVeilSnapLine or not CheatState.CV_Enabled or not IsHoldingSpear() then
-        if CheatState.CV_SnapLine then CheatState.CV_SnapLine.Visible = false end
-        if CheatState.CV_SnapDot then CheatState.CV_SnapDot.Visible = false end
-        return
-    end
-    CreateCVSnapLine()
-    local cam = Workspace.CurrentCamera
-    if not cam then return end
-    local pos = targetPos
-    if not pos then
-        local closest = GetClosestTarget()
-        if closest and closest.Character then pos = GetCharacterPosition(closest.Character) end
-    end
-    if not pos then
-        CheatState.CV_SnapLine.Visible = false
-        CheatState.CV_SnapDot.Visible = false
-        return
-    end
-    local screenPos, onScreen = cam:WorldToViewportPoint(pos)
-    if not onScreen or screenPos.Z <= 0 then
-        CheatState.CV_SnapLine.Visible = false
-        CheatState.CV_SnapDot.Visible = false
-        return
-    end
-    local vp = cam.ViewportSize
-    local center = Vector2.new(vp.X * 0.5, vp.Y * 0.5)
-    local sp = Vector2.new(screenPos.X, screenPos.Y)
-    local delta = sp - center
-    local len = delta.Magnitude
-    if len < 2 then
-        CheatState.CV_SnapLine.Visible = false
-        CheatState.CV_SnapDot.Visible = false
-        return
-    end
-    local locked = CheatState.CV_WasHolding and CheatState.CV_CurrentTarget ~= nil
-    local color = locked and Color3.fromRGB(0, 255, 120) or Color3.fromRGB(255, 220, 0)
-    CheatState.CV_SnapLine.BackgroundColor3 = color
-    CheatState.CV_SnapLine.Size = UDim2.fromOffset(len, locked and 2 or 1)
-    CheatState.CV_SnapLine.Position = UDim2.fromOffset((center.X + sp.X) * 0.5, (center.Y + sp.Y) * 0.5)
-    CheatState.CV_SnapLine.Rotation = math.deg(math.atan2(delta.Y, delta.X))
-    CheatState.CV_SnapLine.Visible = true
-    CheatState.CV_SnapDot.BackgroundColor3 = color
-    CheatState.CV_SnapDot.Position = UDim2.fromOffset(sp.X, sp.Y)
-    CheatState.CV_SnapDot.Visible = true
+    return dir.Unit, bt
 end
 
 local function OnRenderStepAim()
     CheatState.CV_frameCount = CheatState.CV_frameCount + 1
     if not CheatState.CV_Enabled then return end
-    local holding = CheatState.CV_HoldingPC or CheatState.CV_HoldingMobile
-    if not holding then
+    local hold = CheatState.CV_HoldingPC or CheatState.CV_HoldingMobile
+    if not hold then
         if CheatState.CV_WasHolding then
             CheatState.CV_CurrentTarget = nil
             CheatState.CV_WasHolding = false
             CheatState.CV_LastStableDir = nil
             CheatState.CV_acquireStartFrame = nil
         end
-        UpdateCVSnapLine(nil)
         return
     end
     if not CheatState.CV_WasHolding then
@@ -1873,68 +1565,60 @@ local function OnRenderStepAim()
         CheatState.CV_WasHolding = true
         CheatState.CV_acquireStartFrame = CheatState.CV_frameCount
     end
-    local target = CheatState.CV_CurrentTarget
-    if not target then
-        CheatState.CV_WasHolding = false
-        return
-    end
-    local ch = target.Character
-    local hum = ch and ch:FindFirstChildOfClass("Humanoid")
-    if not ch or not hum or hum.Health <= 0 or GetPlayerRole(target) ~= "survivor" then
+    local t = CheatState.CV_CurrentTarget
+    if not t then CheatState.CV_WasHolding = false return end
+    local ch = t.Character
+    local h = ch and ch:FindFirstChildOfClass("Humanoid")
+    if not ch or not h or h.Health <= 0 or GetPlayerRole(t) ~= "survivor" then
         CheatState.CV_WasHolding = false
         CheatState.CV_CurrentTarget = nil
         return
     end
-    local pos = GetCharacterPosition(ch)
-    if not pos then
-        CheatState.CV_WasHolding = false
-        CheatState.CV_CurrentTarget = nil
-        return
-    end
+    local pos = GetCharPos(ch)
+    if not pos then CheatState.CV_WasHolding = false CheatState.CV_CurrentTarget = nil return end
     local cam = Workspace.CurrentCamera
-    local localChar = LocalPlayer.Character
-    local localRoot = localChar and localChar:FindFirstChild("HumanoidRootPart")
-    if not cam or not localRoot then return end
-    if (pos - localRoot.Position).Magnitude > Config.cameraVeilMaxDistance then
+    local my = LocalPlayer.Character
+    local myR = my and my:FindFirstChild("HumanoidRootPart")
+    if not cam or not myR then return end
+    if (pos - myR.Position).Magnitude > Config.cameraVeilMaxDistance then
         CheatState.CV_WasHolding = false
         CheatState.CV_CurrentTarget = nil
         return
     end
-    local vel = GetCharacterVelocity(ch:FindFirstChild("HumanoidRootPart"))
-    local origin = GetCameraOrigin()
-    if not origin then return end
-    local speed = tonumber(CheatState.CV_LastSpearSpeed) or tonumber(Config.cameraVeilSpearSpeed) or 220
-    speed = math.clamp(speed, 35, 800)
-    local gravityMult = math.max(tonumber(CheatState.CV_LastGravityMult) or 1, 0)
-    local gravity = Workspace.Gravity * gravityMult
-    local aimDir, flightT = SolveAimDirection(origin, pos, speed, gravity)
-    if aimDir and flightT and vel.Magnitude > 1.25 then
-        local leadScale = math.clamp(flightT * 0.68, 0, 1.1)
-        local lead = vel * leadScale
+    local vel = GetCharVel(ch:FindFirstChild("HumanoidRootPart"))
+    local o = GetCameraOrigin()
+    if not o then return end
+    local sp = tonumber(CheatState.CV_LastSpearSpeed) or tonumber(Config.cameraVeilSpearSpeed) or 220
+    sp = math.clamp(sp, 35, 800)
+    local gm = math.max(tonumber(CheatState.CV_LastGravityMult) or 1, 0)
+    local g = Workspace.Gravity * gm
+    local dir, ft = SolveAimDirection(o, pos, sp, g)
+    if dir and ft and vel.Magnitude > 1.25 then
+        local ls = math.clamp(ft * 0.68, 0, 1.1)
+        local lead = vel * ls
         if lead.Magnitude > 32 then lead = lead.Unit * 32 end
-        local refined, refinedT = SolveAimDirection(origin, pos + lead, speed, gravity)
-        if refined then aimDir, flightT = refined, refinedT end
+        local rf, rt = SolveAimDirection(o, pos + lead, sp, g)
+        if rf then dir, ft = rf, rt end
     end
-    local stableDir = aimDir
-    if stableDir and stableDir.Y < 0.95 and stableDir.Y > -0.95 then
+    local sd = dir
+    if sd and sd.Y < 0.95 and sd.Y > -0.95 then
         if CheatState.CV_LastStableDir then
-            local diff = math.acos(math.clamp(CheatState.CV_LastStableDir:Dot(stableDir), -1, 1))
-            if diff < Angle45Rad then CheatState.CV_LastStableDir = stableDir end
+            local d = math.acos(math.clamp(CheatState.CV_LastStableDir:Dot(sd), -1, 1))
+            if d < Angle45Rad then CheatState.CV_LastStableDir = sd end
         else
-            CheatState.CV_LastStableDir = stableDir
+            CheatState.CV_LastStableDir = sd
         end
-        stableDir = CheatState.CV_LastStableDir
+        sd = CheatState.CV_LastStableDir
     elseif CheatState.CV_LastStableDir then
-        stableDir = CheatState.CV_LastStableDir
+        sd = CheatState.CV_LastStableDir
     else
-        stableDir = cam.CFrame.LookVector
+        sd = cam.CFrame.LookVector
     end
-    local camPos = cam.CFrame.Position
-    local smooth = math.clamp(Config.cameraVeilSmoothness or 1, 0.05, 1)
-    local newLook = cam.CFrame.LookVector:Lerp(stableDir, smooth)
-    if newLook.Magnitude > 0.001 then
-        cam.CFrame = CFrame.new(camPos, camPos + newLook.Unit)
-        UpdateCVSnapLine(pos)
+    local cp = cam.CFrame.Position
+    local sm = math.clamp(Config.cameraVeilSmoothness or 1, 0.05, 1)
+    local nl = cam.CFrame.LookVector:Lerp(sd, sm)
+    if nl.Magnitude > 0.001 then
+        cam.CFrame = CFrame.new(cp, cp + nl.Unit)
     end
 end
 
@@ -1945,22 +1629,23 @@ local function EnableCameraVeil()
     CheatState.CV_HoldingMobile = false
     CheatState.CV_CurrentTarget = nil
     CheatState.CV_WasHolding = false
-    local c1 = UserInputService.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton2 and IsHoldingSpear() then
+    local c1 = UserInputService.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton2 and IsHoldingSpear() then
             CheatState.CV_HoldingPC = true
         end
     end)
-    local c2 = UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton2 then
+    local c2 = UserInputService.InputEnded:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton2 then
             CheatState.CV_HoldingPC = false
         end
     end)
     table.insert(CheatState.CV_Connections, c1)
     table.insert(CheatState.CV_Connections, c2)
-    RunService:UnbindFromRenderStep("CIGAR_CV")
     pcall(function()
+        RunService:UnbindFromRenderStep("CIGAR_CV")
         RunService:BindToRenderStep("CIGAR_CV", Enum.RenderPriority.Camera.Value + 2, OnRenderStepAim)
     end)
+    CheatState.modLoaded.cameraVeil = true
 end
 
 local function DisableCameraVeil()
@@ -1970,24 +1655,22 @@ local function DisableCameraVeil()
     CheatState.CV_CurrentTarget = nil
     CheatState.CV_WasHolding = false
     CheatState.CV_LastStableDir = nil
-    RunService:UnbindFromRenderStep("CIGAR_CV")
-    for _, conn in ipairs(CheatState.CV_Connections) do pcall(function() conn:Disconnect() end) end
+    pcall(function() RunService:UnbindFromRenderStep("CIGAR_CV") end)
+    for _, c in ipairs(CheatState.CV_Connections) do pcall(function() c:Disconnect() end) end
     CheatState.CV_Connections = {}
-    if CheatState.CV_SnapLine then CheatState.CV_SnapLine.Visible = false end
-    if CheatState.CV_SnapDot then CheatState.CV_SnapDot.Visible = false end
 end
 
 -- =======================================================
--- MODULE: SILENT AIM (Twist of Fate) + LASER ESP
+-- SILENT AIM (guarded hook)
 -- =======================================================
 local function GetMuzzlePos()
-    local char = LocalPlayer.Character
-    if not char then return nil end
+    local ch = LocalPlayer.Character
+    if not ch then return nil end
     local ok, part = pcall(function()
-        return char:FindFirstChild("Twist of Fate"):FindFirstChild("Right Arm"):FindFirstChild("gun"):FindFirstChild("gun")
+        return ch:FindFirstChild("Twist of Fate"):FindFirstChild("Right Arm"):FindFirstChild("gun"):FindFirstChild("gun")
     end)
     if ok and part and part:IsA("BasePart") then return part.Position end
-    local ra = char:FindFirstChild("Right Arm") or char:FindFirstChild("RightHand")
+    local ra = ch:FindFirstChild("Right Arm") or ch:FindFirstChild("RightHand")
     if ra then return ra.Position end
     return nil
 end
@@ -1996,65 +1679,67 @@ local function SetupSilentAimHook()
     local ok, remote = pcall(function()
         return ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Items"):WaitForChild("Twist of Fate"):WaitForChild("Fire")
     end)
-    if not ok or not remote then return end
-    local oldNamecall
-    oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
-        local method = getnamecallmethod()
-        if method == "FireServer" and rawequal(self, remote) then
-            local args = table.pack(...)
-            if CheatState.silentAimEnabled and typeof(CheatState.silentAimLookVector) == "Vector3" then
-                if args.n >= 3 and typeof(args[3]) == "Vector3" then
-                    args[3] = CheatState.silentAimLookVector
-                    CheatState.triggerLaser = true
-                elseif args.n >= 2 and typeof(args[2]) == "Vector3" then
-                    args[2] = CheatState.silentAimLookVector
-                    CheatState.triggerLaser = true
+    if not ok or not remote then return false end
+    local ok2, err = pcall(function()
+        local old
+        old = hookmetamethod(game, "__namecall", function(self, ...)
+            local m = getnamecallmethod()
+            if m == "FireServer" and rawequal(self, remote) then
+                local a = table.pack(...)
+                if CheatState.silentAimEnabled and typeof(CheatState.silentAimLookVector) == "Vector3" then
+                    if a.n >= 3 and typeof(a[3]) == "Vector3" then
+                        a[3] = CheatState.silentAimLookVector
+                        CheatState.triggerLaser = true
+                    elseif a.n >= 2 and typeof(a[2]) == "Vector3" then
+                        a[2] = CheatState.silentAimLookVector
+                        CheatState.triggerLaser = true
+                    end
                 end
+                return old(self, table.unpack(a, 1, a.n))
             end
-            return oldNamecall(self, table.unpack(args, 1, args.n))
-        end
-        return oldNamecall(self, ...)
+            return old(self, ...)
+        end)
     end)
+    if ok2 then CheatState.modLoaded.silentAim = true return true end
+    warn("[CigarLoad] Silent Aim hook failed: " .. tostring(err))
+    return false
 end
 
 local function UpdateSilentAimTarget()
-    if not CheatState.silentAimEnabled then
-        CheatState.silentAimTarget = nil
+    if not CheatState.silentAimEnabled or not CheatState.modLoaded.silentAim then
         CheatState.silentAimLookVector = nil
         return
     end
-    local char = LocalPlayer.Character
-    local root = char and char:FindFirstChild("HumanoidRootPart")
-    if not root then return end
+    local ch = LocalPlayer.Character
+    local r = ch and ch:FindFirstChild("HumanoidRootPart")
+    if not r then return end
     local cam = Workspace.CurrentCamera
     if not cam then return end
-    local closest, minDist = nil, math.huge
-    for _, pl in ipairs(Players:GetPlayers()) do
-        if pl ~= LocalPlayer and GetPlayerRole(pl) == "killer" then
-            local ch = pl.Character
-            local hum = ch and ch:FindFirstChildOfClass("Humanoid")
-            local pos = ch and GetTargetAimPoint(ch)
-            if hum and hum.Health > 0 and pos then
-                local d = (pos - root.Position).Magnitude
-                if d < minDist then minDist = d closest = pl end
+    local best, minD = nil, math.huge
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and GetPlayerRole(p) == "killer" then
+            local c = p.Character
+            local h = c and c:FindFirstChildOfClass("Humanoid")
+            local pos = c and GetTargetAimPoint(c)
+            if h and h.Health > 0 and pos then
+                local d = (pos - r.Position).Magnitude
+                if d < minD then minD = d best = p end
             end
         end
     end
-    if closest and closest.Character then
-        local aimPos = GetTargetAimPoint(closest.Character)
-        if aimPos and IsWorldPointInScreenRadius(cam, aimPos, Config.silentAimFovRadius) then
-            local muzzle = GetMuzzlePos() or cam.CFrame.Position
-            local dir = aimPos - muzzle
+    if best and best.Character then
+        local ap = GetTargetAimPoint(best.Character)
+        if ap and IsWorldPointInScreenRadius(cam, ap, Config.silentAimFovRadius) then
+            local mz = GetMuzzlePos() or cam.CFrame.Position
+            local dir = ap - mz
             if dir.Magnitude > 0.1 then
-                CheatState.silentAimTarget = aimPos
                 CheatState.silentAimLookVector = dir.Unit
-                CheatState.currentMuzzlePos = muzzle
-                CheatState.currentTargetPos = aimPos
+                CheatState.currentMuzzlePos = mz
+                CheatState.currentTargetPos = ap
                 return
             end
         end
     end
-    CheatState.silentAimTarget = nil
     CheatState.silentAimLookVector = nil
 end
 
@@ -2063,232 +1748,216 @@ local function DrawLaserESP()
     CheatState.triggerLaser = false
     local a, b = CheatState.currentMuzzlePos, CheatState.currentTargetPos
     if typeof(a) ~= "Vector3" or typeof(b) ~= "Vector3" then return end
-    local dist = (b - a).Magnitude
-    if dist < 0.1 then return end
-    local part = Instance.new("Part")
-    part.Name = "CigarSilentLaser"
-    part.Anchored = true
-    part.CanCollide = false
-    part.Material = Enum.Material.Neon
-    part.Color = Color3.fromRGB(255, 0, 0)
-    part.Transparency = 0.3
-    part.Size = Vector3.new(0.15, 0.15, dist)
-    part.CFrame = CFrame.new(a, b) * CFrame.new(0, 0, -dist / 2)
-    part.Parent = Workspace
-    task.delay(0.4, function() if part then part:Destroy() end end)
+    local d = (b - a).Magnitude
+    if d < 0.1 then return end
+    local p = Instance.new("Part")
+    p.Name = "CigarSilentLaser"
+    p.Anchored = true
+    p.CanCollide = false
+    p.Material = Enum.Material.Neon
+    p.Color = Color3.fromRGB(255, 0, 0)
+    p.Transparency = 0.3
+    p.Size = Vector3.new(0.15, 0.15, d)
+    p.CFrame = CFrame.new(a, b) * CFrame.new(0, 0, -d / 2)
+    p.Parent = Workspace
+    task.delay(0.4, function() if p then p:Destroy() end end)
 end
 
 -- =======================================================
--- MODULE: SILENT SPEAR
+-- SILENT SPEAR (guarded hook)
 -- =======================================================
-local function CalculateSpearFlight(distX, pitch, speed, gravity)
-    local cosP = math.cos(pitch)
-    if cosP <= 0.015 then return nil end
-    local t = distX / (speed * cosP)
+local function CalcSpearFlight(dx, pitch, sp, g)
+    local cp = math.cos(pitch)
+    if cp <= 0.015 then return nil end
+    local t = dx / (sp * cp)
     if t ~= t or t <= 0 then return nil end
     local dt = 1/60
-    local comp = 0.5 * gravity * dt * t
-    local y = speed * math.sin(pitch) * t - 0.5 * gravity * t * t - comp
+    local comp = 0.5 * g * dt * t
+    local y = sp * math.sin(pitch) * t - 0.5 * g * t * t - comp
     return y, t
 end
 
-local function SolveSpearTrajectory(origin, targetPos, speed, gravity)
-    if speed <= 0 then speed = 142.5 end
-    if gravity <= 0 then gravity = 196.2 end
-    local offset = targetPos - origin
-    local horiz = Vector3.new(offset.X, 0, offset.Z)
-    local distX = horiz.Magnitude
-    local distY = offset.Y
-    if offset.Magnitude <= 0.001 then return nil end
-    if distX <= 0.35 or gravity <= 0.001 then
-        return offset.Unit, math.clamp(offset.Magnitude / speed, 0.025, 5)
-    end
-    local hDir = horiz.Unit
-    local directPitch = math.atan2(distY, distX)
-    local minP = math.max(-Angle28Rad, directPitch - Angle18Rad)
+local function SolveSpearTrajectory(o, tp, sp, g)
+    if sp <= 0 then sp = 142.5 end
+    if g <= 0 then g = 196.2 end
+    local off = tp - o
+    local hor = Vector3.new(off.X, 0, off.Z)
+    local dx = hor.Magnitude
+    local dy = off.Y
+    if off.Magnitude <= 0.001 then return nil end
+    if dx <= 0.35 or g <= 0.001 then return off.Unit, math.clamp(off.Magnitude / sp, 0.025, 5) end
+    local h = hor.Unit
+    local dp = math.atan2(dy, dx)
+    local minP = math.max(-Angle28Rad, dp - Angle18Rad)
     local maxP = Angle72Rad
-    local bestPitch, bestScore, bestDY, bestT = nil, math.huge, math.huge, nil
-    local steps = 30
-    for i = 0, steps do
-        local sp = minP + (maxP - minP) * (i/steps)
-        local y, t = CalculateSpearFlight(distX, sp, speed, gravity)
+    local bp, bs, bdy, bt = nil, math.huge, math.huge, nil
+    for i = 0, 30 do
+        local p = minP + (maxP - minP) * (i/30)
+        local y, t = CalcSpearFlight(dx, p, sp, g)
         if y and t and t >= 0.025 and t <= 5 then
-            local dy = math.abs(y - distY)
-            local score = dy + math.max(sp - Angle42Rad, 0) * 0.35 + math.max(t - 1.3, 0) * 0.25
-            if score < bestScore then
-                bestScore, bestDY, bestPitch, bestT = score, dy, sp, t
-                if dy < MinTargetDiff then break end
-            end
+            local dd = math.abs(y - dy)
+            local sc = dd + math.max(p - Angle42Rad, 0) * 0.35 + math.max(t - 1.3, 0) * 0.25
+            if sc < bs then bs, bdy, bp, bt = sc, dd, p, t if dd < MinTargetDiff then break end end
         end
     end
-    if not bestPitch then
-        local t = math.clamp(distX / speed, 0.025, 5)
-        local aimPos = targetPos + Vector3.new(0, 0.5 * gravity * t * t, 0)
-        local d = aimPos - origin
+    if not bp then
+        local t = math.clamp(dx / sp, 0.025, 5)
+        local ap = tp + Vector3.new(0, 0.5 * g * t * t, 0)
+        local d = ap - o
         if d.Magnitude <= 0.001 then return nil end
         return d.Unit, t
     end
-    local dir = hDir * math.cos(bestPitch) + Vector3.new(0, math.sin(bestPitch), 0)
+    local dir = h * math.cos(bp) + Vector3.new(0, math.sin(bp), 0)
     if dir.Magnitude <= 0.001 then return nil end
-    return dir.Unit, bestT
+    return dir.Unit, bt
 end
 
 local function SetupSilentSpearHook()
     local ok, remote = pcall(function()
         return ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Killers"):WaitForChild("Veil"):WaitForChild("Spearthrow")
     end)
-    if not ok or not remote then return end
-    local oldNamecall
-    oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
-        local method = getnamecallmethod()
-        if method == "FireServer" and rawequal(self, remote) then
-            local args = table.pack(...)
-            if CheatState.silentSpearEnabled and typeof(CheatState.silentSpearLookVector) == "Vector3" then
-                if args.n >= 4 and typeof(args[2]) == "Vector3" and typeof(args[4]) == "Vector3" then
-                    args[2] = CheatState.silentSpearLookVector
+    if not ok or not remote then return false end
+    local ok2, err = pcall(function()
+        local old
+        old = hookmetamethod(game, "__namecall", function(self, ...)
+            local m = getnamecallmethod()
+            if m == "FireServer" and rawequal(self, remote) then
+                local a = table.pack(...)
+                if CheatState.silentSpearEnabled and typeof(CheatState.silentSpearLookVector) == "Vector3" then
+                    if a.n >= 4 and typeof(a[2]) == "Vector3" and typeof(a[4]) == "Vector3" then
+                        a[2] = CheatState.silentSpearLookVector
+                    end
                 end
+                return old(self, table.unpack(a, 1, a.n))
             end
-            return oldNamecall(self, table.unpack(args, 1, args.n))
-        end
-        return oldNamecall(self, ...)
+            return old(self, ...)
+        end)
     end)
+    if ok2 then CheatState.modLoaded.silentSpear = true end
     pcall(function()
-        local visual = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Mechanics"):WaitForChild("visualize")
-        visual.OnClientEvent:Connect(function(charObj, _, speedVal, gravVal)
-            if charObj == LocalPlayer.Character then
-                if type(speedVal) == "number" and speedVal > 0 then CheatState.lastSpearSpeed = speedVal end
-                if type(gravVal) == "number" and gravVal >= 0 then CheatState.lastGravityMult = gravVal end
+        local v = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Mechanics"):WaitForChild("visualize")
+        v.OnClientEvent:Connect(function(c, _, sp, g)
+            if c == LocalPlayer.Character then
+                if type(sp) == "number" and sp > 0 then CheatState.lastSpearSpeed = sp end
+                if type(g) == "number" and g >= 0 then CheatState.lastGravityMult = g end
             end
         end)
     end)
+    return ok2
 end
 
 local function UpdateSilentSpear()
-    if not CheatState.silentSpearEnabled then
-        CheatState.silentSpearTargetTorso = nil
+    if not CheatState.silentSpearEnabled or not CheatState.modLoaded.silentSpear then
         CheatState.silentSpearLookVector = nil
         return
     end
-    local char = LocalPlayer.Character
-    if not char or not char:GetAttribute("spearmode") then
-        CheatState.silentSpearTargetTorso = nil
+    local ch = LocalPlayer.Character
+    if not ch or not ch:GetAttribute("spearmode") then
         CheatState.silentSpearLookVector = nil
         return
     end
-    local root = char:FindFirstChild("HumanoidRootPart")
+    local r = ch:FindFirstChild("HumanoidRootPart")
     local cam = Workspace.CurrentCamera
-    if not root or not cam then return end
-    local closest, minScreen = nil, math.huge
-    for _, pl in ipairs(Players:GetPlayers()) do
-        if pl ~= LocalPlayer and GetPlayerRole(pl) == "survivor" then
-            local ch = pl.Character
-            local hum = ch and ch:FindFirstChildOfClass("Humanoid")
-            local pos = ch and GetTargetAimPoint(ch)
-            if hum and hum.Health > 50 and pos and not ch:GetAttribute("IsHooked") then
-                local sp, onScreen = cam:WorldToViewportPoint(pos)
-                if onScreen then
+    if not r or not cam then return end
+    local best, minS = nil, math.huge
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and GetPlayerRole(p) == "survivor" then
+            local c = p.Character
+            local h = c and c:FindFirstChildOfClass("Humanoid")
+            local pos = c and GetTargetAimPoint(c)
+            if h and h.Health > 50 and pos and not c:GetAttribute("IsHooked") then
+                local sp, on = cam:WorldToViewportPoint(pos)
+                if on then
                     local vp = cam.ViewportSize
                     local center = Vector2.new(vp.X/2, vp.Y/2)
                     local d = (Vector2.new(sp.X, sp.Y) - center).Magnitude
-                    if d <= Config.spearFovRadius and d < minScreen then
-                        minScreen = d closest = pl
-                    end
+                    if d <= Config.spearFovRadius and d < minS then minS = d best = p end
                 end
             end
         end
     end
-    if not closest or not closest.Character then
-        CheatState.silentSpearTargetTorso = nil
+    if not best or not best.Character then
         CheatState.silentSpearLookVector = nil
         return
     end
-    local targetPos = GetTargetAimPoint(closest.Character)
-    local targetRoot = closest.Character:FindFirstChild("HumanoidRootPart")
-    if not targetPos or not targetRoot then
-        CheatState.silentSpearTargetTorso = nil
-        CheatState.silentSpearLookVector = nil
-        return
-    end
-    local origin = cam.CFrame.Position
-    local speed = 142.5
+    local tp = GetTargetAimPoint(best.Character)
+    local tr = best.Character:FindFirstChild("HumanoidRootPart")
+    if not tp or not tr then CheatState.silentSpearLookVector = nil return end
+    local o = cam.CFrame.Position
+    local sp = 142.5
     if CheatState.spearIsHolding and CheatState.spearHoldStartTime then
-        local held = tick() - CheatState.spearHoldStartTime
-        if held >= 2 then speed = 165 elseif held >= 1 then speed = 142.5 else speed = math.max(23, held * 150) end
+        local h = tick() - CheatState.spearHoldStartTime
+        if h >= 2 then sp = 165 elseif h >= 1 then sp = 142.5 else sp = math.max(23, h * 150) end
     end
-    local gravity = Workspace.Gravity * (CheatState.lastGravityMult or 1)
-    local vel = targetRoot.AssemblyLinearVelocity
-    local horizVel = Vector3.new(vel.X, 0, vel.Z)
-    if horizVel.Magnitude > 65 then horizVel = horizVel.Unit * 65 end
-    local dir, t = SolveSpearTrajectory(origin, targetPos, speed, gravity)
+    local g = Workspace.Gravity * (CheatState.lastGravityMult or 1)
+    local v = tr.AssemblyLinearVelocity
+    local hv = Vector3.new(v.X, 0, v.Z)
+    if hv.Magnitude > 65 then hv = hv.Unit * 65 end
+    local dir, t = SolveSpearTrajectory(o, tp, sp, g)
     if dir and t then
-        local lead = horizVel * t
-        local leadPos = targetPos + lead
-        local leadDir, leadT = SolveSpearTrajectory(origin, leadPos, speed, gravity)
-        if leadDir then
-            CheatState.silentSpearTargetTorso = leadPos
-            CheatState.silentSpearLookVector = leadDir
+        local lead = hv * t
+        local lp = tp + lead
+        local ld, lt = SolveSpearTrajectory(o, lp, sp, g)
+        if ld then
+            CheatState.silentSpearLookVector = ld
             return
         end
     end
-    CheatState.silentSpearTargetTorso = nil
     CheatState.silentSpearLookVector = nil
 end
 
 -- =======================================================
 -- PLAYER LIFECYCLE
 -- =======================================================
-local function OnPlayerSetup(player, character)
+local function OnPlayerSetup(player, char)
     if player == LocalPlayer then return end
-    AttachEspAdornee(player, character)
-    UpdateOutline(player, character)
-    if Config.hitboxEnabled then task.wait(0.3) SetPlayerHitbox(player, character) end
-    if Config.hitboxEspEnabled then SetupHitboxEsp(player, character) end
-    if CheatState.autoParryEnabled then Hub.TrackKillerAnimations(player, character) end
+    pcall(AttachEspAdornee, player, char)
+    pcall(UpdateOutline, player, char)
+    if Config.hitboxEnabled then task.wait(0.3) pcall(SetPlayerHitbox, player, char) end
+    if Config.hitboxEspEnabled then pcall(SetupHitboxEsp, player, char) end
+    if CheatState.autoParryEnabled then pcall(Hub.TrackKillerAnimations, player, char) end
 end
 
 local function OnPlayerAdded(player)
     if player == LocalPlayer then return end
     UpdatePlayerRole(player)
-    SetupPlayerEsp(player)
-    SetupPlayerOutline(player)
+    pcall(SetupPlayerEsp, player)
+    pcall(SetupPlayerOutline, player)
     if player.Character then task.spawn(function() OnPlayerSetup(player, player.Character) end) end
-    player.CharacterAdded:Connect(function(character) task.spawn(function() OnPlayerSetup(player, character) end) end)
+    player.CharacterAdded:Connect(function(c) task.spawn(function() OnPlayerSetup(player, c) end) end)
     player:GetPropertyChangedSignal("Team"):Connect(function()
         UpdatePlayerRole(player)
         task.wait(0.2)
-        if CheatState.autoParryEnabled then Hub.TrackKillerAnimations(player) end
+        if CheatState.autoParryEnabled then pcall(Hub.TrackKillerAnimations, player) end
     end)
 end
 
 Players.PlayerAdded:Connect(OnPlayerAdded)
 Players.PlayerRemoving:Connect(function(player)
-    RemovePlayerEsp(player)
-    RemoveHitboxEsp(player)
-    if player.Character then ResetPlayerHitbox(player, player.Character) end
+    pcall(RemovePlayerEsp, player)
+    pcall(RemoveHitboxEsp, player)
+    if player.Character then pcall(ResetPlayerHitbox, player, player.Character) end
     CheatState.playerRoles[player] = nil
     CheatState.playerTeamConns[player] = nil
 end)
 
 for _, p in ipairs(Players:GetPlayers()) do
-    if p ~= LocalPlayer then OnPlayerAdded(p) end
+    if p ~= LocalPlayer then pcall(OnPlayerAdded, p) end
 end
 
-LocalPlayer.CharacterAdded:Connect(function(char)
-    if CheatState.godEnabled then task.wait(0.3) EnableGodMode() end
-    local hum = char:WaitForChild("Humanoid", 5)
-    if hum then
-        if Config.antiFallSlow then EnableAntiFall(hum) end
-        if Config.noSlowdown then EnableNoSlowdown(hum) end
+LocalPlayer.CharacterAdded:Connect(function(c)
+    if CheatState.godEnabled then task.wait(0.3) pcall(EnableGodMode) end
+    local h = c:WaitForChild("Humanoid", 5)
+    if h then
+        if Config.antiFallSlow then pcall(EnableAntiFall, h) end
+        if Config.noSlowdown then pcall(EnableNoSlowdown, h) end
     end
 end)
 
 -- =======================================================
--- MAIN LOOP
+-- MAIN LOOP (all per-feature pcall)
 -- =======================================================
-local accum = {
-    god = 0, autoGen = 0, perf = 0, silentAim = 0, silentSpear = 0,
-    hitboxEsp = 0, warn = 0, autoParryEsp = 0, laser = 0, mapEsp = 0
-}
+local accum = {god=0, autoGen=0, silentAim=0, silentSpear=0, laser=0, warn=0, autoParryEsp=0, mapEsp=0, hitboxEsp=0, perf=0}
 
 RunService.Heartbeat:Connect(function(dt)
     accum.god = accum.god + dt
@@ -2300,46 +1969,90 @@ RunService.Heartbeat:Connect(function(dt)
     accum.autoParryEsp = accum.autoParryEsp + dt
     accum.mapEsp = accum.mapEsp + dt
     accum.hitboxEsp = accum.hitboxEsp + dt
+    accum.perf = accum.perf + dt
 
-    if accum.god >= 0.15 then accum.god = 0 ProcessGodMode() end
-    if accum.autoGen >= 0 then accum.autoGen = 0 HandleAutoGenerators() end
-    if accum.silentAim >= 0.05 then accum.silentAim = 0 UpdateSilentAimTarget() end
-    if accum.silentSpear >= 0 then accum.silentSpear = 0 UpdateSilentSpear() end
-    if accum.laser >= 0 then accum.laser = 0 DrawLaserESP() end
-    if accum.warn >= 0.15 then accum.warn = 0 CheckKillerProximity() end
+    if accum.god >= 0.15 then accum.god = 0 pcall(ProcessGodMode) end
+    accum.autoGen = 0 pcall(HandleAutoGenerators)
+    if accum.silentAim >= 0.05 then accum.silentAim = 0 pcall(UpdateSilentAimTarget) end
+    accum.silentSpear = 0 pcall(UpdateSilentSpear)
+    accum.laser = 0 pcall(DrawLaserESP)
+    if accum.warn >= 0.15 then accum.warn = 0 pcall(CheckKillerProximity) end
     if accum.autoParryEsp >= 0.1 then
         accum.autoParryEsp = 0
         if CheatState.autoParryRadiusEsp then
-            local root = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-            if root and AutoParryState.EspPart and AutoParryState.EspPart.Parent then
-                AutoParryState.EspPart.CFrame = CFrame.new(root.Position)
-            end
+            pcall(function()
+                local r = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if r and AutoParryState.EspPart and AutoParryState.EspPart.Parent then
+                    AutoParryState.EspPart.CFrame = CFrame.new(r.Position)
+                end
+            end)
         end
     end
-    if accum.mapEsp >= 0.2 then accum.mapEsp = 0 UpdateMapEsp() end
+    if accum.mapEsp >= 0.2 then accum.mapEsp = 0 pcall(UpdateMapEsp) end
     if accum.hitboxEsp >= 0.15 then
         accum.hitboxEsp = 0
-        if Config.hitboxEspEnabled then
-            for _, p in ipairs(Players:GetPlayers()) do
-                if p ~= LocalPlayer and p.Character then SetupHitboxEsp(p, p.Character) end
+        pcall(function()
+            if Config.hitboxEspEnabled then
+                for _, p in ipairs(Players:GetPlayers()) do
+                    if p ~= LocalPlayer and p.Character then SetupHitboxEsp(p, p.Character) end
+                end
+            else
+                for p in pairs(CheatState.hitboxEspObjects) do RemoveHitboxEsp(p) end
             end
-        else
-            for p in pairs(CheatState.hitboxEspObjects) do RemoveHitboxEsp(p) end
+        end)
+    end
+    if accum.perf >= 0.5 then
+        accum.perf = 0
+        if CheatState.perfEnabled and CheatState.perfGui then
+            pcall(function()
+                local fps = math.floor(perfFrames / math.max(tick() - perfLastTime, 0.001))
+                perfFrames = 0
+                perfLastTime = tick()
+                local ping = 0
+                pcall(function() ping = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue()) end)
+                local fc = fps >= 50 and "rgb(80,220,100)" or (fps >= 30 and "rgb(255,200,60)" or "rgb(255,70,70)")
+                local pc = ping <= 80 and "rgb(80,220,100)" or (ping <= 150 and "rgb(255,200,60)" or "rgb(255,70,70)")
+                local f = CheatState.perfGui:FindFirstChild("PerfFrame")
+                local l = f and f:FindFirstChild("InfoLabel")
+                if l then
+                    l.Text = string.format('<font color="%s">FPS %d</font> | <font color="%s">PING %d</font>', fc, fps, pc, ping)
+                end
+            end)
         end
     end
+end)
+
+RunService.RenderStepped:Connect(function()
+    if CheatState.perfEnabled then perfFrames = perfFrames + 1 end
 end)
 
 RunService.Stepped:Connect(function()
-    if Config.lockFovEnabled then Camera.FieldOfView = Config.customFovValue end
+    if Config.lockFovEnabled then
+        pcall(function() Camera.FieldOfView = Config.customFovValue end)
+    end
+end)
+
+-- Cursor force check
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if gpe or UserInputService:GetFocusedTextBox() then return end
+    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode.Name == Config.forceCursorKeybind then
+        pcall(function()
+            SetForceCursor(not Config.forceCursorEnabled)
+            CigarUI:MakeNotify({Title = "Cursor", Description = "Keybind", Content = "Force Cursor: " .. (Config.forceCursorEnabled and "ON" or "OFF"), Color = Color3.fromRGB(80, 200, 255), Delay = 1.5})
+        end)
+    end
+end)
+UserInputService:GetPropertyChangedSignal("MouseBehavior"):Connect(function()
+    if Config.forceCursorEnabled then pcall(ForceCursorProps) end
 end)
 
 -- =======================================================
--- SETUP HOOKS (SILENT AIM/SPEAR)
+-- HOOKS SETUP (guarded — non-blocking)
 -- =======================================================
 task.spawn(function()
     task.wait(2)
-    SetupSilentAimHook()
-    SetupSilentSpearHook()
+    pcall(SetupSilentAimHook)
+    pcall(SetupSilentSpearHook)
 end)
 
 -- =======================================================
@@ -2352,178 +2065,125 @@ local Window = CigarUI:Window({
     Version = 1,
     Search = true,
     Author = nil,
-    Footer = "Cigar Hub | Upgraded Edition",
+    Footer = "Cigar Hub | Full Fixed Edition",
     Telegram = "https://t.me/CigarHub",
     TabWidth = 135,
 })
 
--- =======================================================
--- TAB: SURVIVORS
--- =======================================================
+-- SURVIVORS TAB
 local SurvivorTab = Window:AddTab({ Name = "Survivors", Icon = "user" })
-
 local GenSec = SurvivorTab:AddSection("Auto Fix Generator", false)
 GenSec:AddToggle({Title = "Auto Repair Generator", Content = "Automatically hits skill checks", Default = true, Save = true, Callback = function(v) Config.autoGenerator = v end})
 GenSec:AddDropdown({Title = "Repair Mode", Options = {"Instant", "Perfect", "Normal"}, Default = "Instant", Save = true, Callback = function(v) Config.autoGeneratorMode = v end})
-
 local GodSec = SurvivorTab:AddSection("God Mode", false)
-GodSec:AddToggle({Title = "God Mode", Content = "Anti-down + instant heal", Default = false, Save = true, Callback = function(v) if v then EnableGodMode() else DisableGodMode() end end})
-
+GodSec:AddToggle({Title = "God Mode", Content = "Anti-down + instant heal", Default = false, Save = true, Callback = function(v) if v then pcall(EnableGodMode) else pcall(DisableGodMode) end end})
 local ParrySec = SurvivorTab:AddSection("Auto Parry", false)
-ParrySec:AddToggle({Title = "Auto Parry", Content = "Auto parry killer attacks in range", Default = false, Save = true, Callback = function(v) if v then Hub.EnableAutoParry() else Hub.DisableAutoParry() end end})
-ParrySec:AddToggle({Title = "Parry Radius ESP", Content = "Red circle around you = parry range", Default = false, Save = true, Callback = function(v) CheatState.autoParryRadiusEsp = v if v then Hub.DrawAutoParryEsp() else Hub.ClearAutoParryEsp() end end})
-ParrySec:AddSlider({Title = "Parry Radius (Studs)", Min = 4, Max = 40, Default = 12, Increment = 1, Live = true, Save = true, Callback = function(v) CheatState.autoParryRadius = v if CheatState.autoParryRadiusEsp then Hub.DrawAutoParryEsp() end end})
-
+ParrySec:AddToggle({Title = "Auto Parry", Content = "Auto parry killer attacks in range", Default = false, Save = true, Callback = function(v) if v then pcall(Hub.EnableAutoParry) else pcall(Hub.DisableAutoParry) end end})
+ParrySec:AddToggle({Title = "Parry Radius ESP", Content = "Red circle around you = parry range", Default = false, Save = true, Callback = function(v) CheatState.autoParryRadiusEsp = v if v then pcall(Hub.DrawAutoParryEsp) else pcall(Hub.ClearAutoParryEsp) end end})
+ParrySec:AddSlider({Title = "Parry Radius (Studs)", Min = 4, Max = 40, Default = 12, Increment = 1, Live = true, Save = true, Callback = function(v) CheatState.autoParryRadius = v if CheatState.autoParryRadiusEsp then pcall(Hub.DrawAutoParryEsp) end end})
 local EscapeSec = SurvivorTab:AddSection("Exit Gate & Escape", false)
-EscapeSec:AddButton({Title = "TP to Exit Gate", Content = "Teleport near exit gate", Callback = function() Hub.TeleportToExitGate() end})
-EscapeSec:AddToggle({Title = "Ghost Gate (Legit)", Content = "Walk through gate", Default = false, Save = true, Callback = function(v) CheatState.ghostGateEnabled = v Hub.ApplyGhostGate() end})
-
+EscapeSec:AddButton({Title = "TP to Exit Gate", Content = "Teleport near exit gate", Callback = function() pcall(Hub.TeleportToExitGate) end})
+EscapeSec:AddToggle({Title = "Ghost Gate (Legit)", Content = "Walk through gate", Default = false, Save = true, Callback = function(v) CheatState.ghostGateEnabled = v pcall(Hub.ApplyGhostGate) end})
 local MoveSec = SurvivorTab:AddSection("Movement", false)
-MoveSec:AddToggle({Title = "No Slowdown", Content = "WalkSpeed can't drop below normal", Default = false, Save = true, Callback = function(v) Config.noSlowdown = v local c = LocalPlayer.Character local h = c and c:FindFirstChildOfClass("Humanoid") if v then EnableNoSlowdown(h) else DisableNoSlowdown() end end})
-MoveSec:AddToggle({Title = "Anti Fall Slow", Content = "Prevents slowdown when landing", Default = false, Save = true, Callback = function(v) Config.antiFallSlow = v local c = LocalPlayer.Character local h = c and c:FindFirstChildOfClass("Humanoid") if v then EnableAntiFall(h) else DisableAntiFall(h) end end})
-MoveSec:AddToggle({Title = "Speed Boost", Content = "Increase movement speed", Default = false, Save = true, Callback = function(v) Config.speedBoost = v local c = LocalPlayer.Character local h = c and c:FindFirstChildOfClass("Humanoid") if h then h.WalkSpeed = v and GetModifiedSpeed() or DefaultWalkSpeed end end})
+MoveSec:AddToggle({Title = "No Slowdown", Content = "WalkSpeed can't drop below normal", Default = false, Save = true, Callback = function(v) Config.noSlowdown = v pcall(function() local h = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") if v then EnableNoSlowdown(h) else DisableNoSlowdown() end end) end})
+MoveSec:AddToggle({Title = "Anti Fall Slow", Content = "Prevents slowdown when landing", Default = false, Save = true, Callback = function(v) Config.antiFallSlow = v pcall(function() local h = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") if v then EnableAntiFall(h) else DisableAntiFall(h) end end) end})
+MoveSec:AddToggle({Title = "Speed Boost", Content = "Increase movement speed", Default = false, Save = true, Callback = function(v) Config.speedBoost = v pcall(function() local h = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") if h then h.WalkSpeed = v and GetModifiedSpeed() or DefaultWalkSpeed end end) end})
 MoveSec:AddSlider({Title = "Boost Amount (%)", Min = 0, Max = 100, Default = 50, Increment = 5, Live = true, Save = true, Callback = function(v) Config.boostPercent = v end})
 
--- =======================================================
--- TAB: KILLERS
--- =======================================================
+-- KILLERS TAB
 local KillerTab = Window:AddTab({ Name = "Killers", Icon = "sword" })
-
 local HB = KillerTab:AddSection("Hitbox Modifier", false)
-HB:AddToggle({Title = "Enable Hitbox Modifier", Default = false, Save = true, Callback = function(v) Config.hitboxEnabled = v SetAllHitboxes() end})
-HB:AddSlider({Title = "Survivor Hitbox Size (%)", Min = 100, Max = 300, Default = 100, Increment = 10, Live = true, Save = true, Callback = function(v) Config.survivorHitboxSize = v if Config.hitboxEnabled then SetAllHitboxes() end end})
-HB:AddSlider({Title = "Killer Hitbox Size (%)", Min = 100, Max = 300, Default = 100, Increment = 10, Live = true, Save = true, Callback = function(v) Config.killerHitboxSize = v if Config.hitboxEnabled then SetAllHitboxes() end end})
-
+HB:AddToggle({Title = "Enable Hitbox Modifier", Default = false, Save = true, Callback = function(v) Config.hitboxEnabled = v pcall(SetAllHitboxes) end})
+HB:AddSlider({Title = "Survivor Hitbox Size (%)", Min = 100, Max = 300, Default = 100, Increment = 10, Live = true, Save = true, Callback = function(v) Config.survivorHitboxSize = v if Config.hitboxEnabled then pcall(SetAllHitboxes) end end})
+HB:AddSlider({Title = "Killer Hitbox Size (%)", Min = 100, Max = 300, Default = 100, Increment = 10, Live = true, Save = true, Callback = function(v) Config.killerHitboxSize = v if Config.hitboxEnabled then pcall(SetAllHitboxes) end end})
 local SA = KillerTab:AddSection("Silent Aim (Twist of Fate)", false)
 SA:AddToggle({Title = "Silent Aim", Default = false, Save = true, Callback = function(v) CheatState.silentAimEnabled = v end})
-SA:AddToggle({Title = "Laser ESP", Content = "Show laser from muzzle to target", Default = false, Save = true, Callback = function(v) CheatState.laserEspEnabled = v end})
+SA:AddToggle({Title = "Laser ESP", Default = false, Save = true, Callback = function(v) CheatState.laserEspEnabled = v end})
 SA:AddSlider({Title = "FOV Radius", Min = 30, Max = 500, Default = 150, Increment = 5, Live = true, Save = true, Callback = function(v) Config.silentAimFovRadius = v end})
-
 local SS = KillerTab:AddSection("Silent Spear (Veil)", false)
 SS:AddToggle({Title = "Silent Spear", Default = false, Save = true, Callback = function(v) CheatState.silentSpearEnabled = v end})
 SS:AddSlider({Title = "FOV Radius", Min = 30, Max = 500, Default = 150, Increment = 5, Live = true, Save = true, Callback = function(v) Config.spearFovRadius = v end})
-
 local CV = KillerTab:AddSection("Camera Veil (Legit)", false)
-CV:AddToggle({Title = "Camera Veil", Default = false, Save = true, Callback = function(v)
-    Config.cameraVeilEnabled = v
-    if v then EnableCameraVeil() else DisableCameraVeil() end
-end})
+CV:AddToggle({Title = "Camera Veil", Default = false, Save = true, Callback = function(v) Config.cameraVeilEnabled = v if v then pcall(EnableCameraVeil) else pcall(DisableCameraVeil) end end})
 CV:AddToggle({Title = "SnapLine ESP", Default = false, Save = true, Callback = function(v) Config.cameraVeilSnapLine = v end})
 CV:AddSlider({Title = "Max Distance", Min = 20, Max = 300, Default = 175, Increment = 5, Live = true, Save = true, Callback = function(v) Config.cameraVeilMaxDistance = v end})
 CV:AddSlider({Title = "Smoothness", Min = 0.05, Max = 1, Default = 1, Increment = 0.05, Live = true, Save = true, Callback = function(v) Config.cameraVeilSmoothness = v end})
 
--- =======================================================
--- TAB: VISUALS
--- =======================================================
+-- VISUALS TAB
 local VisTab = Window:AddTab({ Name = "Visuals (ESP)", Icon = "eye" })
-
 local PE = VisTab:AddSection("Player ESP", false)
-PE:AddToggle({Title = "ESP Survivors", Default = true, Save = true, Callback = function(v) Config.espSurvivors = v UpdatePlayerEsp() end})
-PE:AddToggle({Title = "Survivor Name", Default = false, Save = true, Callback = function(v) Config.survivorShowName = v UpdatePlayerEsp() end})
-PE:AddToggle({Title = "Survivor Outline", Default = true, Save = true, Callback = function(v) Config.survivorShowOutline = v UpdatePlayerEsp() end})
-PE:AddColorPicker({Title = "Survivor Color", Default = Config.survivorColor, Save = true, Callback = function(c) Config.survivorColor = c UpdatePlayerEsp() end})
-
-PE:AddToggle({Title = "ESP Killer", Default = true, Save = true, Callback = function(v) Config.espKiller = v UpdatePlayerEsp() end})
-PE:AddToggle({Title = "Killer Name", Default = false, Save = true, Callback = function(v) Config.killerShowName = v UpdatePlayerEsp() end})
-PE:AddToggle({Title = "Killer Outline", Default = true, Save = true, Callback = function(v) Config.killerShowOutline = v UpdatePlayerEsp() end})
-PE:AddColorPicker({Title = "Killer Color", Default = Config.killerColor, Save = true, Callback = function(c) Config.killerColor = c UpdatePlayerEsp() end})
-
-PE:AddToggle({Title = "Outline Only", Content = "No fill, just outline", Default = true, Save = true, Callback = function(v)
-    Config.killerOutlineOnly = v Config.survivorOutlineOnly = v
-    UpdatePlayerEsp()
-end})
-
+PE:AddToggle({Title = "ESP Survivors", Default = true, Save = true, Callback = function(v) Config.espSurvivors = v pcall(UpdatePlayerEsp) end})
+PE:AddToggle({Title = "Survivor Name", Default = false, Save = true, Callback = function(v) Config.survivorShowName = v pcall(UpdatePlayerEsp) end})
+PE:AddToggle({Title = "Survivor Outline", Default = true, Save = true, Callback = function(v) Config.survivorShowOutline = v pcall(UpdatePlayerEsp) end})
+PE:AddColorPicker({Title = "Survivor Color", Default = Config.survivorColor, Save = true, Callback = function(c) Config.survivorColor = c pcall(UpdatePlayerEsp) end})
+PE:AddToggle({Title = "ESP Killer", Default = true, Save = true, Callback = function(v) Config.espKiller = v pcall(UpdatePlayerEsp) end})
+PE:AddToggle({Title = "Killer Name", Default = false, Save = true, Callback = function(v) Config.killerShowName = v pcall(UpdatePlayerEsp) end})
+PE:AddToggle({Title = "Killer Outline", Default = true, Save = true, Callback = function(v) Config.killerShowOutline = v pcall(UpdatePlayerEsp) end})
+PE:AddColorPicker({Title = "Killer Color", Default = Config.killerColor, Save = true, Callback = function(c) Config.killerColor = c pcall(UpdatePlayerEsp) end})
+PE:AddToggle({Title = "Outline Only", Content = "No fill, just outline", Default = true, Save = true, Callback = function(v) Config.killerOutlineOnly = v Config.survivorOutlineOnly = v pcall(UpdatePlayerEsp) end})
 local HE = VisTab:AddSection("Hitbox ESP", false)
-HE:AddToggle({Title = "Enable Hitbox ESP", Default = false, Save = true, Callback = function(v)
-    Config.hitboxEspEnabled = v
-    if not v then for p in pairs(CheatState.hitboxEspObjects) do RemoveHitboxEsp(p) end end
-end})
+HE:AddToggle({Title = "Enable Hitbox ESP", Default = false, Save = true, Callback = function(v) Config.hitboxEspEnabled = v if not v then for p in pairs(CheatState.hitboxEspObjects) do pcall(RemoveHitboxEsp, p) end end end})
 HE:AddColorPicker({Title = "Survivor Box Color", Default = Config.hitboxEspSurvivorColor, Save = true, Callback = function(c) Config.hitboxEspSurvivorColor = c end})
 HE:AddColorPicker({Title = "Killer Box Color", Default = Config.hitboxEspKillerColor, Save = true, Callback = function(c) Config.hitboxEspKillerColor = c end})
-
 local ME = VisTab:AddSection("Map Objects ESP", false)
-ME:AddToggle({Title = "ESP Generator", Default = false, Save = true, Callback = function(v) Config.espGeneratorEnabled = v UpdateMapEsp() end})
-ME:AddToggle({Title = "Generator Progress %", Default = true, Save = true, Callback = function(v)
-    Config.espGeneratorProgressGen = v
-    for _, gen in ipairs(CheatState.cachedMapObjects.Generators) do
-        if gen and gen.Parent then
-            gen:SetAttribute("CigarGenLastPct", nil)
-            local bb = gen:FindFirstChild("CigarGenProgress") if bb then bb:Destroy() end
-        end
-    end
-    if Config.espGeneratorEnabled then UpdateMapEsp() end
-end})
-ME:AddColorPicker({Title = "Generator Color", Default = Config.espGeneratorColor, Save = true, Callback = function(c) Config.espGeneratorColor = c if Config.espGeneratorEnabled then UpdateMapEsp() end end})
-ME:AddToggle({Title = "ESP Pallet", Default = false, Save = true, Callback = function(v) Config.espPalletEnabled = v UpdateMapEsp() end})
-ME:AddColorPicker({Title = "Pallet Color", Default = Config.espPalletColor, Save = true, Callback = function(c) Config.espPalletColor = c if Config.espPalletEnabled then UpdateMapEsp() end end})
-ME:AddToggle({Title = "ESP Hook", Default = false, Save = true, Callback = function(v) Config.espHookEnabled = v UpdateMapEsp() end})
-ME:AddColorPicker({Title = "Hook Color", Default = Config.espHookColor, Save = true, Callback = function(c) Config.espHookColor = c if Config.espHookEnabled then UpdateMapEsp() end end})
-ME:AddToggle({Title = "ESP Gate", Default = false, Save = true, Callback = function(v) Config.espGateEnabled = v UpdateMapEsp() end})
-ME:AddColorPicker({Title = "Gate Color", Default = Config.espGateColor, Save = true, Callback = function(c) Config.espGateColor = c if Config.espGateEnabled then UpdateMapEsp() end end})
-
+ME:AddToggle({Title = "ESP Generator", Default = false, Save = true, Callback = function(v) Config.espGeneratorEnabled = v pcall(UpdateMapEsp) end})
+ME:AddToggle({Title = "Generator Progress %", Default = true, Save = true, Callback = function(v) Config.espGeneratorProgressGen = v for _, gen in ipairs(CheatState.cachedMapObjects.Generators) do if gen and gen.Parent then gen:SetAttribute("CigarGenLastPct", nil) local bb = gen:FindFirstChild("CigarGenProgress") if bb then bb:Destroy() end end end if Config.espGeneratorEnabled then pcall(UpdateMapEsp) end end})
+ME:AddColorPicker({Title = "Generator Color", Default = Config.espGeneratorColor, Save = true, Callback = function(c) Config.espGeneratorColor = c if Config.espGeneratorEnabled then pcall(UpdateMapEsp) end end})
+ME:AddToggle({Title = "ESP Pallet", Default = false, Save = true, Callback = function(v) Config.espPalletEnabled = v pcall(UpdateMapEsp) end})
+ME:AddColorPicker({Title = "Pallet Color", Default = Config.espPalletColor, Save = true, Callback = function(c) Config.espPalletColor = c if Config.espPalletEnabled then pcall(UpdateMapEsp) end end})
+ME:AddToggle({Title = "ESP Hook", Default = false, Save = true, Callback = function(v) Config.espHookEnabled = v pcall(UpdateMapEsp) end})
+ME:AddColorPicker({Title = "Hook Color", Default = Config.espHookColor, Save = true, Callback = function(c) Config.espHookColor = c if Config.espHookEnabled then pcall(UpdateMapEsp) end end})
+ME:AddToggle({Title = "ESP Gate", Default = false, Save = true, Callback = function(v) Config.espGateEnabled = v pcall(UpdateMapEsp) end})
+ME:AddColorPicker({Title = "Gate Color", Default = Config.espGateColor, Save = true, Callback = function(c) Config.espGateColor = c if Config.espGateEnabled then pcall(UpdateMapEsp) end end})
 local World = VisTab:AddSection("World Settings", false)
-World:AddToggle({Title = "Fullbright", Default = false, Save = true, Callback = function(v) Config.fullbrightEnabled = v if v then EnableFullbright() else DisableFullbright() end end})
-World:AddToggle({Title = "Remove Visual Effects", Content = "Boost FPS", Default = false, Save = true, Callback = function(v) Config.removeVfxEnabled = v if v then RemoveVisualEffects() else RestoreVisualEffects() end end})
+World:AddToggle({Title = "Fullbright", Default = false, Save = true, Callback = function(v) Config.fullbrightEnabled = v if v then pcall(EnableFullbright) else pcall(DisableFullbright) end end})
+World:AddToggle({Title = "Remove Visual Effects", Content = "Boost FPS", Default = false, Save = true, Callback = function(v) Config.removeVfxEnabled = v if v then pcall(RemoveVisualEffects) else pcall(RestoreVisualEffects) end end})
 
--- =======================================================
--- TAB: MISC
--- =======================================================
+-- MISC TAB
 local MiscTab = Window:AddTab({ Name = "Misc", Icon = "cherry" })
-
 local WarnSec = MiscTab:AddSection("Killer Warn", false)
-WarnSec:AddToggle({Title = "Enable Killer Warn", Content = "Notify when killer approaches", Default = false, Save = true, Callback = function(v) Config.warnEnabled = v end})
-
+WarnSec:AddToggle({Title = "Enable Killer Warn", Default = false, Save = true, Callback = function(v) Config.warnEnabled = v end})
 local PerfSec = MiscTab:AddSection("Performance Monitor", false)
-PerfSec:AddToggle({Title = "Show Performance Window", Default = false, Save = true, Callback = function(v) if v then EnablePerfMonitor() else DisablePerfMonitor() end end})
-
+PerfSec:AddToggle({Title = "Show Performance Window", Default = false, Save = true, Callback = function(v) if v then pcall(EnablePerfMonitor) else pcall(DisablePerfMonitor) end end})
 local CursorSec = MiscTab:AddSection("Cursor", false)
-CursorSec:AddToggle({Title = "Enable Force Cursor", Default = false, Save = true, Callback = function(v) SetForceCursor(v) end})
-CursorSec:AddKeybind({Title = "Force Cursor Keybind", Default = Enum.KeyCode.G, Callback = function(k) Config.forceCursorKeybind = k.Name CigarUI:MakeNotify({Title = "Cursor", Description = "Keybind", Content = "Set to: " .. k.Name, Color = Color3.fromRGB(80, 200, 255), Delay = 1.5}) end})
-
+CursorSec:AddToggle({Title = "Enable Force Cursor", Default = false, Save = true, Callback = function(v) pcall(SetForceCursor, v) end})
+CursorSec:AddKeybind({Title = "Force Cursor Keybind", Default = Enum.KeyCode.G, Callback = function(k) Config.forceCursorKeybind = k.Name pcall(function() CigarUI:MakeNotify({Title = "Cursor", Description = "Keybind", Content = "Set to: " .. k.Name, Color = Color3.fromRGB(80, 200, 255), Delay = 1.5}) end) end})
 local FovSec = MiscTab:AddSection("Lock FOV", false)
-FovSec:AddToggle({Title = "Lock FOV", Default = false, Save = true, Callback = function(v) Config.lockFovEnabled = v if v then SetFov(Config.customFovValue) else ResetFov() end end})
-FovSec:AddSlider({Title = "FOV Value", Min = 30, Max = 120, Default = 70, Increment = 1, Live = true, Save = true, Callback = function(v) Config.customFovValue = v if Config.lockFovEnabled then SetFov(v) end end})
-
+FovSec:AddToggle({Title = "Lock FOV", Default = false, Save = true, Callback = function(v) Config.lockFovEnabled = v if v then pcall(SetFov, Config.customFovValue) else pcall(ResetFov) end end})
+FovSec:AddSlider({Title = "FOV Value", Min = 30, Max = 120, Default = 70, Increment = 1, Live = true, Save = true, Callback = function(v) Config.customFovValue = v if Config.lockFovEnabled then pcall(SetFov, v) end end})
 local NP = MiscTab:AddSection("Protect Name", false)
-NP:AddToggle({Title = "Enable Protect Name", Content = "Hide player names (visual only)", Default = false, Save = true, Callback = function(v) if v then EnableNameProtect() else DisableNameProtect() end end})
-
+NP:AddToggle({Title = "Enable Protect Name", Default = false, Save = true, Callback = function(v) if v then pcall(EnableNameProtect) else pcall(DisableNameProtect) end end})
 local SK = MiscTab:AddSection("Skip End Screen", false)
-SK:AddToggle({Title = "Skip End Screen", Content = "Bypass match cutscene", Default = false, Save = true, Callback = function(v) Config.skipEndScreenEnabled = v if v then EnableSkipEndScreen() else DisableSkipEndScreen() end end})
+SK:AddToggle({Title = "Skip End Screen", Default = false, Save = true, Callback = function(v) Config.skipEndScreenEnabled = v if v then pcall(EnableSkipEndScreen) else pcall(DisableSkipEndScreen) end end})
 
--- =======================================================
--- TAB: CROSSHAIR
--- =======================================================
+-- CROSSHAIR TAB
 local CrossTab = Window:AddTab({ Name = "Crosshair", Icon = "crosshair" })
 local CH = CrossTab:AddSection("Crosshair Settings", false)
-CH:AddToggle({Title = "Enable Crosshair", Default = false, Save = true, Callback = function(v) Config.crosshairEnabled = v if v then ShowCrosshair() else DestroyCrosshair() end end})
-CH:AddDropdown({Title = "Style", Options = crosshairTypes, Default = "Plus", Save = true, Callback = function(v) Config.crosshairStyle = v if Config.crosshairEnabled then ShowCrosshair() end end})
-CH:AddSlider({Title = "Size", Min = 0, Max = 100, Default = 50, Increment = 1, Live = true, Save = true, Callback = function(v) Config.crosshairSize = v if Config.crosshairEnabled then ShowCrosshair() end end})
-CH:AddSlider({Title = "Opacity", Min = 0, Max = 100, Default = 100, Increment = 1, Live = true, Save = true, Callback = function(v) Config.crosshairOpacity = v / 100 if Config.crosshairEnabled then ShowCrosshair() end end})
-CH:AddColorPicker({Title = "Color", Default = Config.crosshairColor, Save = true, Callback = function(c) Config.crosshairColor = c if Config.crosshairEnabled then ShowCrosshair() end end})
+CH:AddToggle({Title = "Enable Crosshair", Default = false, Save = true, Callback = function(v) Config.crosshairEnabled = v if v then pcall(ShowCrosshair) else pcall(DestroyCrosshair) end end})
+CH:AddDropdown({Title = "Style", Options = crosshairTypes, Default = "Plus", Save = true, Callback = function(v) Config.crosshairStyle = v if Config.crosshairEnabled then pcall(ShowCrosshair) end end})
+CH:AddSlider({Title = "Size", Min = 0, Max = 100, Default = 50, Increment = 1, Live = true, Save = true, Callback = function(v) Config.crosshairSize = v if Config.crosshairEnabled then pcall(ShowCrosshair) end end})
+CH:AddSlider({Title = "Opacity", Min = 0, Max = 100, Default = 100, Increment = 1, Live = true, Save = true, Callback = function(v) Config.crosshairOpacity = v / 100 if Config.crosshairEnabled then pcall(ShowCrosshair) end end})
+CH:AddColorPicker({Title = "Color", Default = Config.crosshairColor, Save = true, Callback = function(c) Config.crosshairColor = c if Config.crosshairEnabled then pcall(ShowCrosshair) end end})
 
--- =======================================================
--- TAB: SETTINGS
--- =======================================================
+-- SETTINGS TAB
 local SettingsTab = Window:AddTab({ Name = "Settings", Icon = "settings" })
 SettingsTab:AddSection("Config Manager", false):AddConfig()
 
--- =======================================================
--- TAB: INFO
--- =======================================================
+-- INFO TAB
 Window:InfoTab({
     Name = "Information",
     Icon = "info",
     SectionTitle = "Hub Information",
-    Version = "v2.0 Upgraded",
+    Version = "v2.1 Full Fixed",
     TelegramName = "Cigar Script Channel",
     TelegramLink = "https://t.me/CigarHub",
     TelegramText = "Official channel for updates & scripts.",
     ButtonText = "Copy Link",
     Cards = {{
-        Title = "Violence District Hub v2.0",
-        Description = "Author: kayybitch\nMerged: CigarHub + CigarLoad\nFeatures: Silent Aim, Silent Spear, Camera Veil, Auto Parry, Crosshair, PerfMonitor, Name Protect, Skip End Screen",
+        Title = "Violence District Hub v2.1",
+        Description = "Author: kayybitch\nMerged: CigarHub\nAll features active, per-feature pcall guards.\nSilent Aim, Silent Spear, Camera Veil, Auto Parry, Crosshair, PerfMonitor, Name Protect, Skip End Screen",
         Logo = "info",
     }}
 })
 
-CigarUI:MakeNotify({Title = "Cigar Hub", Description = "Loaded", Content = "Violence District v2.0 Upgraded loaded!", Color = Color3.fromRGB(255, 85, 85), Delay = 5})
+pcall(function() CigarUI:MakeNotify({Title = "Cigar Hub", Description = "Loaded", Content = "Violence District v2.1 Full Fixed loaded!", Color = Color3.fromRGB(255, 85, 85), Delay = 5}) end)
